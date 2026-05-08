@@ -59,7 +59,6 @@ public class ItensVendaDAO {
 
             stmt.execute();
 
-            // Recalcular TOTAL após inserir item
             double total = totalDaNota(i.getNotaFiscalVendaItem());
             new VendaDAO().atualizarValorTotal(i.getNotaFiscalVendaItem(), total);
 
@@ -93,7 +92,6 @@ public class ItensVendaDAO {
                     return 0;
                 }
                 return total;
-
             }
 
         } catch (SQLException e) {
@@ -113,7 +111,10 @@ public class ItensVendaDAO {
 
         try {
             stmt = con.prepareStatement(
-                    "SELECT * FROM item_venda WHERE NotaFiscal_Saida = ?"
+                    "SELECT iv.*, m.Nome_Med " +
+                    "FROM item_venda iv " +
+                    "INNER JOIN medicamento m ON iv.Cod_Med = m.Cod_Med " +
+                    "WHERE iv.NotaFiscal_Saida = ?"
             );
             stmt.setInt(1, notaFiscal);
             rs = stmt.executeQuery();
@@ -126,6 +127,7 @@ public class ItensVendaDAO {
                 item.setQuantidadeItemVenda(rs.getInt("Qtd_ItemVenda"));
                 item.setValorItemVenda(rs.getDouble("Valor_ItemVenda"));
                 item.setDataValItemVenda(rs.getDate("DataVal_ItemVenda").toString());
+                item.setNomeMedItemVenda(rs.getString("Nome_Med")); // NOVO
 
                 itens.add(item);
             }

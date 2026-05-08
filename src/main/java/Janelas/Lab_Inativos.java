@@ -22,6 +22,7 @@ public class Lab_Inativos extends javax.swing.JFrame {
      */
     public Lab_Inativos() {
         initComponents();
+        this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         this.setLocationRelativeTo(null);
         jTInativos.setModel(modelo);
         modelo.recarregaTabelaInativos();

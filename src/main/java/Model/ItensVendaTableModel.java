@@ -1,23 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Model;
-
 import DAO.ItensVendaDAO;
 import Objetos.ItensVenda;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
-/**
- *
- * @author andrey.munhoz
- */
 public class ItensVendaTableModel extends AbstractTableModel {
-
     private List<ItensVenda> dados = new ArrayList<>();
-    private String[] colunas = {"Quantidade", "Valor", "Data de Validade", "Nota fiscal", "Código do medicamento"};
+    private String[] colunas = {"Quantidade", "Valor", "Data de Validade", "Nota fiscal", "Medicamento"};
 
     @Override
     public String getColumnName(int column) {
@@ -46,7 +36,7 @@ public class ItensVendaTableModel extends AbstractTableModel {
             case 3:
                 return dados.get(linha).getNotaFiscalVendaItem();
             case 4:
-                return dados.get(linha).getCodMedItemVenda();
+                return dados.get(linha).getNomeMedItemVenda(); // ALTERADO
         }
         return null;
     }
@@ -67,7 +57,7 @@ public class ItensVendaTableModel extends AbstractTableModel {
                 dados.get(linha).setNotaFiscalVendaItem(Integer.parseInt((String) valor));
                 break;
             case 4:
-                dados.get(linha).setCodMedItemVenda(Integer.parseInt((String) valor));
+                // somente leitura, não editar o nome do medicamento
                 break;
         }
         this.fireTableRowsUpdated(linha, linha);
@@ -88,10 +78,8 @@ public class ItensVendaTableModel extends AbstractTableModel {
 
     private void lerDados() {
         ItensVendaDAO ivdao = new ItensVendaDAO();
-
         for (ItensVenda iv : ivdao.read()) {
             this.addLinha(iv);
-
         }
         this.fireTableDataChanged();
     }
@@ -113,5 +101,4 @@ public class ItensVendaTableModel extends AbstractTableModel {
         this.dados.addAll(itens);
         fireTableDataChanged();
     }
-
 }

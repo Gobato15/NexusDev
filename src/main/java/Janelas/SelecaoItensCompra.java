@@ -36,6 +36,7 @@ public class SelecaoItensCompra extends javax.swing.JFrame {
 
     public SelecaoItensCompra() {
         initComponents();
+        this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
 
     }
 

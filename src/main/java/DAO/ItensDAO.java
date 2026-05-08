@@ -13,7 +13,6 @@ public class ItensDAO {
         Connection con = Conexao.getConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;
-
         List<Itens> itens = new ArrayList<>();
 
         try {
@@ -43,14 +42,13 @@ public class ItensDAO {
     }
 
     public void create(Itens i) {
-
         Connection con = Conexao.getConnection();
         PreparedStatement stmt = null;
 
         try {
             stmt = con.prepareStatement(
-                    "INSERT INTO item (DataVal_Item, Qtd_Item, Valor_Item, Data_Venda, NotaFiscal_Entrada, Cod_CatMed, Cod_Med)"
-                    + " VALUES (?, ?, ?, ?, ?, ?, ?)"
+                "INSERT INTO item (DataVal_Item, Qtd_Item, Valor_Item, Data_Venda, NotaFiscal_Entrada, Cod_CatMed, Cod_Med)"
+                + " VALUES (?, ?, ?, ?, ?, ?, ?)"
             );
 
             stmt.setString(1, i.getDataValItem());
@@ -63,7 +61,6 @@ public class ItensDAO {
 
             stmt.execute();
 
-            // Recalcular TOTAL após inserir item
             double total = totalDaNota(i.getNotaFiscalCompraItem());
             new CompraDAO().atualizarValorTotal(i.getNotaFiscalCompraItem(), total);
 
@@ -83,20 +80,16 @@ public class ItensDAO {
 
         try {
             stmt = con.prepareStatement(
-                    "SELECT SUM(Valor_Item * Qtd_Item) AS Total "
-                    + "FROM item WHERE NotaFiscal_Entrada = ?"
+                "SELECT SUM(Valor_Item * Qtd_Item) AS Total "
+                + "FROM item WHERE NotaFiscal_Entrada = ?"
             );
-
             stmt.setInt(1, notaFiscal);
             rs = stmt.executeQuery();
 
             if (rs.next()) {
                 double total = rs.getDouble("Total");
-                if (rs.wasNull()) {
-                    return 0;
-                }
+                if (rs.wasNull()) return 0;
                 return total;
-
             }
 
         } catch (SQLException e) {
@@ -107,6 +100,8 @@ public class ItensDAO {
 
         return 0;
     }
+
+    // ✅ JOIN com catalogo_medicamento para trazer o nome do produto
     public List<Itens> readByNotaFiscal(int notaFiscal) {
         List<Itens> itens = new ArrayList<>();
         Connection con = Conexao.getConnection();
@@ -115,28 +110,32 @@ public class ItensDAO {
 
         try {
             stmt = con.prepareStatement(
-                    "SELECT * FROM item WHERE NotaFiscal_Entrada = ?"
+                "SELECT i.*, c.Nome_CatMed " +
+                "FROM item i " +
+                "LEFT JOIN catalogo_medicamento c ON i.Cod_CatMed = c.Cod_CatMed " +
+                "WHERE i.NotaFiscal_Entrada = ?"
             );
             stmt.setInt(1, notaFiscal);
             rs = stmt.executeQuery();
 
             while (rs.next()) {
                 Itens item = new Itens();
-
+                item.setCodigoItem(rs.getInt("Cod_Item"));
                 item.setNotaFiscalCompraItem(rs.getInt("NotaFiscal_Entrada"));
                 item.setCodMedItem(rs.getInt("Cod_Med"));
+                item.setCodCatMedItem(rs.getInt("Cod_CatMed"));
                 item.setQuantidadeItem(rs.getInt("Qtd_Item"));
                 item.setValorItem(rs.getDouble("Valor_Item"));
-                item.setDataValItem(rs.getDate("DataVal_Item").toString());
-
+                item.setDataValItem(rs.getString("DataVal_Item"));
+                item.setDataVendaItem(rs.getString("Data_Venda"));
+                // ✅ Nome do produto vindo do catálogo
+                item.setNomeMedItem(rs.getString("Nome_CatMed"));
                 itens.add(item);
             }
 
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(
-                    null,
-                    "Erro ao buscar itens da venda:\n" + e.getMessage()
-            );
+            JOptionPane.showMessageDialog(null,
+                "Erro ao buscar itens da compra:\n" + e.getMessage());
         } finally {
             Conexao.closeConnection(con, stmt, rs);
         }

@@ -18,11 +18,13 @@ public class JanelaDetalhesVenda extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JanelaDetalhesVenda.class.getName());
 
+    
     /**
      * Creates new form JanelaDetalhesVenda
      */
     public JanelaDetalhesVenda() {
         initComponents();
+        this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
     }
 
     public JanelaDetalhesVenda(int notaFiscal) {

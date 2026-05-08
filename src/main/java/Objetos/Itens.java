@@ -18,6 +18,7 @@ public class Itens {
     private int notaFiscalCompraItem;
     private int codCatMedItem;
     private int codMedItem;
+    private String nomeMedItem;
 
     /**
      * @return the codigoItem
@@ -62,17 +63,17 @@ public class Itens {
     }
 
     /**
-     * @return the valorItemItem
+     * @return the valorItem
      */
     public Double getValorItem() {
         return valorItem;
     }
 
     /**
-     * @param valorItemItem the valorItemItem to set
+     * @param valorItem the valorItem to set
      */
-    public void setValorItem(Double valorItemItem) {
-        this.valorItem = valorItemItem;
+    public void setValorItem(Double valorItem) {
+        this.valorItem = valorItem;
     }
 
     /**
@@ -130,5 +131,24 @@ public class Itens {
     public void setCodMedItem(int codMedItem) {
         this.codMedItem = codMedItem;
     }
+
+    /**
+     * @return the nomeMedItem
+     */
+    public String getNomeMedItem() {
+        return nomeMedItem;
+    }
+
+    /**
+     * @param nomeMedItem the nomeMedItem to set
+     */
+    public void setNomeMedItem(String nomeMedItem) {
+        this.nomeMedItem = nomeMedItem;
+    }
+
+    /**
+     * @return the codigoItem
+     */
+    
 
 }
