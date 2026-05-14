@@ -22,6 +22,7 @@ public class Drog_Inativos extends javax.swing.JFrame {
      */
     public Drog_Inativos() {
         initComponents();
+        this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         this.setLocationRelativeTo(null);
         jTInativos.setModel(modelo);
         modelo.recarregaTabelaInativos();
@@ -43,6 +44,8 @@ public class Drog_Inativos extends javax.swing.JFrame {
         jTInativos = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(1920, 1080));
+        setPreferredSize(new java.awt.Dimension(1920, 1080));
 
         jBReativar.setText("Reativar");
         jBReativar.addActionListener(new java.awt.event.ActionListener() {

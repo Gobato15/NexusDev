@@ -94,7 +94,7 @@ public List<DrogariaObjeto> readInativos() {
         }
     }
 
-    public void updtae(DrogariaObjeto d) {
+    public void update(DrogariaObjeto d) {
         Connection con = Conexao.getConnection();
         PreparedStatement stmt = null;
 

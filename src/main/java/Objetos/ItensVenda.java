@@ -16,6 +16,21 @@ public class ItensVenda {
     private Double valorItemVenda;
     private int notaFiscalVendaItem;
     private int codMedItemVenda;
+    private String nomeMedItemVenda;
+
+    /**
+     * @return the nomeMedItemVenda
+     */
+    public String getNomeMedItemVenda() {
+        return nomeMedItemVenda;
+    }
+
+    /**
+     * @param nomeMedItemVenda the nomeMedItemVenda to set
+     */
+    public void setNomeMedItemVenda(String nomeMedItemVenda) {
+        this.nomeMedItemVenda = nomeMedItemVenda;
+    }
 
     /**
      * @return the codigoItem

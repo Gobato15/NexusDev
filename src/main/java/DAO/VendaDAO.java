@@ -68,7 +68,7 @@ public class VendaDAO {
         }
     }
 
-    public void updtae(Venda v) {
+    public void update(Venda v) {
         Connection con = Conexao.getConnection();
         PreparedStatement stmt = null;
 

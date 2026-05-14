@@ -50,7 +50,8 @@ public class MedicamentoDAO {
         PreparedStatement stmt = null;
 
         try {
-            stmt = con.prepareStatement("INSERT INTO medicamento (Nome_Med, Desc_Med, DataVal_Med, Qtd_Med, Valor_Med, Cod_CatMed) VALUES (?,?,?,?,?,?)");
+            stmt = con.prepareStatement(
+                    "INSERT INTO medicamento (Nome_Med, Desc_Med, DataVal_Med, Qtd_Med, Valor_Med, Cod_CatMed) VALUES (?,?,?,?,?,?)");
             stmt.setString(1, m.getNomeMed());
             stmt.setString(2, m.getDescricaoMed());
             stmt.setString(3, m.getDataValidadeMed());
@@ -68,12 +69,13 @@ public class MedicamentoDAO {
         }
     }
 
-    public void updtae(Medicamento m) {
+    public void update(Medicamento m) {
         Connection con = Conexao.getConnection();
         PreparedStatement stmt = null;
 
         try {
-            stmt = con.prepareStatement("UPDATE medicamento set Nome_Med = ?, Desc_Med = ?, DataVal_Med = ?, Qtd_Med = ?, Valor_Med = ?, Cod_CatMed = ? where Cod_Med = ?");
+            stmt = con.prepareStatement(
+                    "UPDATE medicamento set Nome_Med = ?, Desc_Med = ?, DataVal_Med = ?, Qtd_Med = ?, Valor_Med = ?, Cod_CatMed = ? where Cod_Med = ?");
             stmt.setString(1, m.getNomeMed());
             stmt.setString(2, m.getDescricaoMed());
             stmt.setString(3, m.getDataValidadeMed());
@@ -113,7 +115,8 @@ public class MedicamentoDAO {
     public int createAndReturnId(Medicamento med) {
         String sql = "INSERT INTO medicamento (Nome_Med, Valor_Med, Qtd_Med, Desc_Med, DataVal_Med, Cod_CatMed) VALUES (?, ?, ?, ?, ?, ?)";
 
-        try (Connection con = Conexao.getConnection(); PreparedStatement stmt = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+        try (Connection con = Conexao.getConnection();
+                PreparedStatement stmt = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
             // Define os valores
             stmt.setString(1, med.getNomeMed());
@@ -128,7 +131,7 @@ public class MedicamentoDAO {
             // Pega o Cod_Med gerado pelo auto_increment
             try (ResultSet rs = stmt.getGeneratedKeys()) {
                 if (rs.next()) {
-                    return rs.getInt(1);  // Retorna o Cod_Med
+                    return rs.getInt(1); // Retorna o Cod_Med
                 }
             }
 
@@ -137,6 +140,6 @@ public class MedicamentoDAO {
             e.printStackTrace();
         }
 
-        return -1;  // Erro
+        return -1; // Erro
     }
 }

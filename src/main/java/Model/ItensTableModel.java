@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Model;
 
 import DAO.ItensDAO;
@@ -10,14 +6,19 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
-/**
- *
- * @author andrey.munhoz
- */
 public class ItensTableModel extends AbstractTableModel {
 
     private List<Itens> dados = new ArrayList<>();
-    private String[] colunas = {"Quantidade", "Valor", "Data de Validade", "Nota fiscal", "Código do medicamento"};
+
+    // ✅ Nome do Produto adicionado como primeira coluna
+    private String[] colunas = {
+        "Nome do Produto",
+        "Quantidade",
+        "Valor Unitário",
+        "Subtotal",
+        "Data de Validade",
+        "Nota Fiscal"
+    };
 
     @Override
     public String getColumnName(int column) {
@@ -36,38 +37,37 @@ public class ItensTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int linha, int coluna) {
+        Itens item = dados.get(linha);
         switch (coluna) {
-            case 0:
-                return dados.get(linha).getQuantidadeItem();
-            case 1:
-                return dados.get(linha).getValorItem();
-            case 2:
-                return dados.get(linha).getDataValItem();
-            case 3:
-                return dados.get(linha).getNotaFiscalCompraItem();
-            case 4:
-                return dados.get(linha).getCodMedItem();
+            case 0: return item.getNomeMedItem();   // ✅ Nome do produto
+            case 1: return item.getQuantidadeItem();
+            case 2: return String.format("R$ %.2f", item.getValorItem());
+            case 3: return String.format("R$ %.2f", item.getValorItem() * item.getQuantidadeItem());
+            case 4: return item.getDataValItem();
+            case 5: return item.getNotaFiscalCompraItem();
+            default: return null;
         }
-        return null;
+    }
+
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return false; // somente leitura na tela de detalhes
     }
 
     @Override
     public void setValueAt(Object valor, int linha, int coluna) {
         switch (coluna) {
-            case 0:
+            case 1:
                 dados.get(linha).setQuantidadeItem(Integer.parseInt((String) valor));
                 break;
-            case 1:
+            case 2:
                 dados.get(linha).setValorItem(Double.valueOf((String) valor));
                 break;
-            case 2:
+            case 4:
                 dados.get(linha).setDataValItem((String) valor);
                 break;
-            case 3:
+            case 5:
                 dados.get(linha).setNotaFiscalCompraItem(Integer.parseInt((String) valor));
-                break;
-            case 4:
-                dados.get(linha).setCodMedItem(Integer.parseInt((String) valor));
                 break;
         }
         this.fireTableRowsUpdated(linha, linha);
@@ -88,10 +88,8 @@ public class ItensTableModel extends AbstractTableModel {
 
     private void lerDados() {
         ItensDAO idao = new ItensDAO();
-
         for (Itens i : idao.read()) {
             this.addLinha(i);
-
         }
         this.fireTableDataChanged();
     }

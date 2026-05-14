@@ -24,6 +24,7 @@ public class VendaJanela extends javax.swing.JFrame {
     
     public VendaJanela() {
         initComponents();
+        this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
     }
 
     /**

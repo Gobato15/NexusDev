@@ -69,6 +69,8 @@ CREATE TABLE medicamento (
   DataVal_Med DATE NOT NULL,
   Qtd_Med INT NOT NULL,
   Valor_Med DECIMAL(10,2) NOT NULL,
+  Valor_Compra DECIMAL(10,2) DEFAULT 0,
+  Nome_Lab VARCHAR(50),
   Cod_CatMed INT,
   FOREIGN KEY (Cod_CatMed) REFERENCES catalogo_medicamento(Cod_CatMed)
 );
@@ -82,6 +84,7 @@ CREATE TABLE compra (
   Data_Compra DATE DEFAULT (CURRENT_DATE),
   CPF VARCHAR(14),
   CNPJ_Lab VARCHAR(18),
+  Ativo_Compra TINYINT(1) NOT NULL DEFAULT 1,
   FOREIGN KEY (CPF) REFERENCES funcionario(CPF),
   FOREIGN KEY (CNPJ_Lab) REFERENCES laboratorio(CNPJ_Lab)
 );
@@ -171,17 +174,17 @@ INSERT INTO catalogo_medicamento (Nome_CatMed, Desc_CatMed, Valor_CatMed, CNPJ_L
 ('Azitromicina', 'Antibiótico', 35.00, '09.999.999/0001-09', '2024-04-10', '2025-04-10', 70),
 ('Losartana', 'Antihipertensivo', 22.90, '10.000.000/0001-10', '2024-02-28', '2026-02-28', 180);
 
-INSERT INTO medicamento (Nome_Med, Desc_Med, DataVal_Med, Qtd_Med, Valor_Med, Cod_CatMed) VALUES
-('Paracetamol 500mg', 'Comprimidos 500mg', '2026-05-20', 150, 12.50, 1),
-('Ibuprofeno 600mg', 'Comprimidos 600mg', '2025-12-10', 200, 18.90, 2),
-('Amoxicilina 500mg', 'Cápsulas 500mg', '2026-02-15', 120, 32.00, 3),
-('Loratadina 10mg', 'Comprimidos 10mg', '2026-01-10', 180, 15.75, 4),
-('Omeprazol 20mg', 'Cápsulas 20mg', '2027-04-20', 250, 25.00, 5),
-('Dipirona 1g', 'Comprimidos 1g', '2025-11-10', 300, 10.00, 6),
-('Cetoprofeno 100mg', 'Cápsulas 100mg', '2026-03-12', 150, 19.50, 7),
-('Sinvastatina 20mg', 'Comprimidos 20mg', '2027-07-30', 100, 28.40, 8),
-('Azitromicina 500mg', 'Cápsulas 500mg', '2026-12-01', 90, 35.00, 9),
-('Losartana 50mg', 'Comprimidos 50mg', '2027-09-05', 180, 22.90, 10);
+INSERT INTO medicamento (Nome_Med, Desc_Med, DataVal_Med, Qtd_Med, Valor_Med, Valor_Compra, Nome_Lab, Cod_CatMed) VALUES
+('Paracetamol 500mg', 'Comprimidos 500mg', '2026-05-20', 150, 12.50, 8.00, 'Pfizer', 1),
+('Ibuprofeno 600mg', 'Comprimidos 600mg', '2025-12-10', 200, 18.90, 10.00, 'EMS', 2),
+('Amoxicilina 500mg', 'Cápsulas 500mg', '2026-02-15', 120, 32.00, 20.00, 'Eurofarma', 3),
+('Loratadina 10mg', 'Comprimidos 10mg', '2026-01-10', 180, 15.75, 8.00, 'Aché', 4),
+('Omeprazol 20mg', 'Cápsulas 20mg', '2027-04-20', 250, 25.00, 12.00, 'Biolab', 5),
+('Dipirona 1g', 'Comprimidos 1g', '2025-11-10', 300, 10.00, 5.00, 'Neo Química', 6),
+('Cetoprofeno 100mg', 'Cápsulas 100mg', '2026-03-12', 150, 19.50, 10.00, 'Sanofi', 7),
+('Sinvastatina 20mg', 'Comprimidos 20mg', '2027-07-30', 100, 28.40, 15.00, 'Roche', 8),
+('Azitromicina 500mg', 'Cápsulas 500mg', '2026-12-01', 90, 35.00, 20.00, 'Bayer', 9),
+('Losartana 50mg', 'Comprimidos 50mg', '2027-09-05', 180, 22.90, 12.00, 'Medley', 10);
 
 CREATE OR REPLACE VIEW vw_relatorio_vendas_detalhadas AS
 SELECT
@@ -260,3 +263,23 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+DELIMITER $$
+
+DROP TRIGGER IF EXISTS trg_cancela_compra_reverte_estoque $$
+CREATE TRIGGER trg_cancela_compra_reverte_estoque
+AFTER UPDATE ON compra
+FOR EACH ROW
+BEGIN
+    IF OLD.Ativo_Compra = 1 AND NEW.Ativo_Compra = 0 THEN
+        UPDATE medicamento m
+        JOIN item i ON m.Cod_Med = i.Cod_Med
+        SET m.Qtd_Med = m.Qtd_Med - i.Qtd_Item
+        WHERE i.NotaFiscal_Entrada = NEW.NotaFiscal_Entrada;
+    END IF;
+END $$
+
+DELIMITER ;
+INSERT INTO funcionario (CPF, Nome_Fun, Telefone_Fun, Cep_Fun, Num_Fun, Email_Fun, Senha_Fun, Funcao, Ativo_Fun) VALUES
+('123456789-10','Nexus ADM','19998796179','13502-030',284,'nexusadm@gmail.com','$2y$10$f9tyQJC2VhXl0GQswvKS6.wweN6W3qlNHZXoF9jpo4iCmyTt4PuAi','Administrador',1),
+('98765432109','Nexus Usario','19998796179','13502-030',284,'nexususuario@gmail.com','$2y$10$Ww64qXEO1CqynfymGx2HYu.M5ZPeoB5VmizcYBJ0azOjoD4RNRXGK','Usuario',1);
