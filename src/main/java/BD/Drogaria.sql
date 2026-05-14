@@ -280,3 +280,6 @@ BEGIN
 END $$
 
 DELIMITER ;
+INSERT INTO funcionario (CPF, Nome_Fun, Telefone_Fun, Cep_Fun, Num_Fun, Email_Fun, Senha_Fun, Funcao, Ativo_Fun) VALUES
+('123456789-10','Nexus ADM','19998796179','13502-030',284,'nexusadm@gmail.com','$2y$10$f9tyQJC2VhXl0GQswvKS6.wweN6W3qlNHZXoF9jpo4iCmyTt4PuAi','Administrador',1),
+('98765432109','Nexus Usario','19998796179','13502-030',284,'nexususuario@gmail.com','$2y$10$Ww64qXEO1CqynfymGx2HYu.M5ZPeoB5VmizcYBJ0azOjoD4RNRXGK','Usuario',1);
