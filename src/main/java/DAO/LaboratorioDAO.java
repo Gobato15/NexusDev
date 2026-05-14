@@ -56,8 +56,7 @@ public class LaboratorioDAO {
 
         try {
             stmt = con.prepareStatement(
-                    "SELECT * FROM laboratorio WHERE Ativo_Lab = 0"
-            );
+                    "SELECT * FROM laboratorio WHERE Ativo_Lab = 0");
             rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -112,30 +111,33 @@ public class LaboratorioDAO {
         PreparedStatement stmt = null;
 
         try {
-            stmt = con.prepareStatement("INSERT INTO laboratorio (CNPJ_Lab, Nome_Lab, Telefone_Lab, Cep_Lab, Num_Lab, Email_Lab) VALUES (?,?,?,?,?,?)");
-            stmt.setString(1, l.getNomeLab());
-            stmt.setString(2, l.getTelefoneLab());
-            stmt.setString(3, l.getCepLab());
-            stmt.setInt(4, l.getNumeroLab());
-            stmt.setString(5, l.getEmailLab());
-            stmt.setString(6, l.getCnpjLab());
+            String sql = "INSERT INTO laboratorio (Num_Lab, Email_Lab, CNPJ_Lab, Nome_Lab, Telefone_Lab, Cep_Lab) VALUES (?,?,?,?,?,?)";
+            stmt = con.prepareStatement(sql);
+
+            stmt.setInt(1, l.getNumeroLab());
+            stmt.setString(2, l.getEmailLab());
+            stmt.setString(3, l.getCnpjLab());
+            stmt.setString(4, l.getNomeLab());
+            stmt.setString(5, l.getTelefoneLab());
+            stmt.setString(6, l.getCepLab());
 
             stmt.execute();
             JOptionPane.showMessageDialog(null, "Laboratório cadastrado com sucesso!");
 
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Falha ao cadastrar: " + e);
+            JOptionPane.showMessageDialog(null, "Falha ao cadastrar: " + e.getMessage());
         } finally {
             Conexao.closeConnection(con, stmt);
         }
     }
 
-    public void updtae(Laboratorio l) {
+    public void update(Laboratorio l) {
         Connection con = Conexao.getConnection();
         PreparedStatement stmt = null;
 
         try {
-            stmt = con.prepareStatement("UPDATE laboratorio set Nome_Lab = ?, Telefone_Lab = ?, Cep_Lab = ?, Num_Lab = ?, Email_Lab = ? where CNPJ_Lab = ?");
+            stmt = con.prepareStatement(
+                    "UPDATE laboratorio set Nome_Lab = ?, Telefone_Lab = ?, Cep_Lab = ?, Num_Lab = ?, Email_Lab = ? where CNPJ_Lab = ?");
             stmt.setString(1, l.getNomeLab());
             stmt.setString(2, l.getTelefoneLab());
             stmt.setString(3, l.getCepLab());
@@ -159,8 +161,7 @@ public class LaboratorioDAO {
 
         try {
             stmt = con.prepareStatement(
-                    "UPDATE laboratorio SET Ativo_Lab = 0 WHERE CNPJ_Lab = ?"
-            );
+                    "UPDATE laboratorio SET Ativo_Lab = 0 WHERE CNPJ_Lab = ?");
             stmt.setString(1, l.getCnpjLab());
 
             stmt.executeUpdate();
@@ -172,14 +173,14 @@ public class LaboratorioDAO {
             Conexao.closeConnection(con, stmt);
         }
     }
+
     public void ativar(Laboratorio l) {
         Connection con = Conexao.getConnection();
         PreparedStatement stmt = null;
 
         try {
             stmt = con.prepareStatement(
-                    "UPDATE laboratorio SET Ativo_Lab = 1 WHERE CNPJ_Lab = ?"
-            );
+                    "UPDATE laboratorio SET Ativo_Lab = 1 WHERE CNPJ_Lab = ?");
             stmt.setString(1, l.getCnpjLab());
 
             stmt.executeUpdate();

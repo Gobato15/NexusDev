@@ -13,7 +13,8 @@ import javax.swing.table.AbstractTableModel;
 public class MedicamentoTableModel extends AbstractTableModel {
 
     private List<Medicamento> dados = new ArrayList<>();
-    private String[] colunas = {"Código Medicamento", "Nome", "Descrição", "Quantidade", "Valor", "Data de validade","Código Catalogo"};
+    private String[] colunas = { "Código Medicamento", "Nome", "Descrição", "Quantidade", "Valor", "Data de validade",
+            "Código Catalogo" };
 
     @Override
     public String getColumnName(int column) {
@@ -55,25 +56,25 @@ public class MedicamentoTableModel extends AbstractTableModel {
     public void setValueAt(Object valor, int linha, int coluna) {
         switch (coluna) {
             case 0:
-                dados.get(linha).setCodMed(Integer.parseInt((String)valor));
+                dados.get(linha).setCodMed(Integer.parseInt((String) valor));
                 break;
             case 1:
-                dados.get(linha).setNomeMed((String)valor);
+                dados.get(linha).setNomeMed((String) valor);
                 break;
             case 2:
-                dados.get(linha).setDescricaoMed((String)valor);
+                dados.get(linha).setDescricaoMed((String) valor);
                 break;
             case 3:
-                dados.get(linha).setQuantidadeMed(Integer.parseInt((String)valor));
+                dados.get(linha).setQuantidadeMed(Integer.parseInt((String) valor));
                 break;
             case 4:
-                dados.get(linha).setValorMed(Double.valueOf((String)valor));
+                dados.get(linha).setValorMed(Double.valueOf((String) valor));
                 break;
             case 5:
-                dados.get(linha).setDataValidadeMed((String)valor);
+                dados.get(linha).setDataValidadeMed((String) valor);
                 break;
             case 6:
-                dados.get(linha).setCodCatMed(Integer.parseInt((String)valor));
+                dados.get(linha).setCodCatMed(Integer.parseInt((String) valor));
                 break;
         }
         this.fireTableRowsUpdated(linha, linha);
@@ -102,22 +103,22 @@ public class MedicamentoTableModel extends AbstractTableModel {
         }
         this.fireTableDataChanged();
     }
-//    private void lerDadosCNPJ(String cnpj) {
-//        MedicamentoDAO cdao = new MedicamentoDAO();
-//        for (Medicamento cd : cdao.readCNPJ(cnpj)) {
-//            this.addLinha(cd);
-//        }
-//        this.fireTableDataChanged();
-//    }
+    // private void lerDadosCNPJ(String cnpj) {
+    // MedicamentoDAO cdao = new MedicamentoDAO();
+    // for (Medicamento cd : cdao.readCNPJ(cnpj)) {
+    // this.addLinha(cd);
+    // }
+    // this.fireTableDataChanged();
+    // }
 
     public void recarregaTabela() {
         this.dados.clear();
         lerDados();
         this.fireTableDataChanged();
     }
-//    public void recarregaTabelaCNPJ(String cnpj) {
-//        this.dados.clear();
-//        lerDadosCNPJ(cnpj);
-//        this.fireTableDataChanged();
-//    }
+    // public void recarregaTabelaCNPJ(String cnpj) {
+    // this.dados.clear();
+    // lerDadosCNPJ(cnpj);
+    // this.fireTableDataChanged();
+    // }
 }

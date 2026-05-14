@@ -305,7 +305,7 @@ public class Drogaria extends javax.swing.JFrame {
 
             DrogariaObjeto d = modelo.pegaDadosLinha(jTTabelaDrogaria.getSelectedRow());
             DrogariaDAO dao = new DrogariaDAO();
-            dao.updtae(d);
+            dao.update(d);
             LimpaCampos();
             modelo.recarregaTabela();
         }

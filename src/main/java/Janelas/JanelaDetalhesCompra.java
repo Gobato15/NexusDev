@@ -29,6 +29,7 @@ public class JanelaDetalhesCompra extends javax.swing.JFrame {
 
     public JanelaDetalhesCompra(int notaFiscal) {
         initComponents();
+        this.setLocationRelativeTo(null);
         this.notaFiscal = notaFiscal;
 
         jTTabelaItensVenda.setModel(modelo);

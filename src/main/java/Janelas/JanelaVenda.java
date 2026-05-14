@@ -41,6 +41,7 @@ public class JanelaVenda extends javax.swing.JFrame {
 
     public JanelaVenda(Funcionario user, Menu menu) {
         initComponents();
+        this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         this.setLocationRelativeTo(null);
         getContentPane().setBackground(Color.GRAY);
         this.menu = menu;
