@@ -24,6 +24,7 @@ public class CompraDAO {
                 Compra c = new Compra();
                 c.setNotaFiscalCompra(rs.getInt("NotaFiscal_Entrada"));
                 c.setValorTotal(rs.getDouble("Valor_Total"));
+                c.setDataCompra(rs.getString("Data_Compra"));
                 c.setCpfCompra(rs.getString("CPF"));
                 c.setCnpjCompra(rs.getString("CNPJ_Lab"));
                 compras.add(c);
@@ -112,7 +113,7 @@ public class CompraDAO {
 
     public List<Compra> readByCnpj(String cnpj) {
         List<Compra> lista = new ArrayList<>();
-        String sql = "SELECT * FROM venda WHERE cnpj_venda = ?";
+        String sql = "SELECT * FROM compra WHERE CNPJ_Lab = ?";
 
         try (Connection con = Conexao.getConnection();
                 PreparedStatement ps = con.prepareStatement(sql)) {
@@ -124,6 +125,7 @@ public class CompraDAO {
                 Compra c = new Compra();
                 c.setNotaFiscalCompra(rs.getInt("NotaFiscal_Entrada"));
                 c.setValorTotal(rs.getDouble("Valor_Total"));
+                c.setDataCompra(rs.getString("Data_Compra"));
                 c.setCpfCompra(rs.getString("CPF"));
                 c.setCnpjCompra(rs.getString("CNPJ_Lab"));
                 lista.add(c);
@@ -149,6 +151,22 @@ public class CompraDAO {
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Falha ao remover: " + e);
+        } finally {
+            Conexao.closeConnection(con, stmt);
+        }
+    }
+
+    public void finalizar(int notaFiscal) {
+        Connection con = Conexao.getConnection();
+        PreparedStatement stmt = null;
+
+        try {
+            stmt = con.prepareStatement(
+                    "UPDATE compra SET Finalizada = 1 WHERE NotaFiscal_Entrada = ?");
+            stmt.setInt(1, notaFiscal);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao finalizar compra: " + e);
         } finally {
             Conexao.closeConnection(con, stmt);
         }

@@ -10,6 +10,7 @@ public class Funcionario {
     private String email_Fun;
     private String funcao;
     private String senhaHash;
+    private boolean ativo;
     
     // Encoder único para gerar/verificar hash
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -17,6 +18,14 @@ public class Funcionario {
     // =========================
     // GETTERS / SETTERS
     // =========================
+    
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
     
     public String getNome_Fun() {
         return nome_Fun;

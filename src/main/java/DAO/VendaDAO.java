@@ -165,29 +165,29 @@ public class VendaDAO {
         }
     }
     public List<Venda> readByCnpj(String cnpj) {
-    List<Venda> lista = new ArrayList<>();
-    String sql = "SELECT * FROM venda WHERE cnpj_venda = ?";
+        List<Venda> lista = new ArrayList<>();
+        String sql = "SELECT * FROM venda WHERE CNPJ_Drog = ?";
 
-    try (Connection con = Conexao.getConnection();
-         PreparedStatement ps = con.prepareStatement(sql)) {
+        try (Connection con = Conexao.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)) {
 
-        ps.setString(1, cnpj);
-        ResultSet rs = ps.executeQuery();
+            ps.setString(1, cnpj);
+            ResultSet rs = ps.executeQuery();
 
-        while (rs.next()) {
-            Venda v = new Venda();
-            v.setNotaFiscalVenda(rs.getInt("nota_fiscal"));
-            v.setValorVenda(rs.getDouble("valor_venda"));
-            v.setCpfVenda(rs.getString("cpf_venda"));
-            v.setCnpjVenda(rs.getString("cnpj_venda"));
-            lista.add(v);
+            while (rs.next()) {
+                Venda v = new Venda();
+                v.setNotaFiscalVenda(rs.getInt("NotaFiscal_Saida"));
+                v.setValorVenda(rs.getDouble("Valor_Venda"));
+                v.setCpfVenda(rs.getString("CPF"));
+                v.setCnpjVenda(rs.getString("CNPJ_Drog"));
+                lista.add(v);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-    } catch (Exception e) {
-        e.printStackTrace();
+        return lista;
     }
-    return lista;
-}
 
 
     public void delete(Venda v) {
@@ -203,6 +203,22 @@ public class VendaDAO {
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Falha ao remover: " + e);
+        } finally {
+            Conexao.closeConnection(con, stmt);
+        }
+    }
+
+    public void finalizar(int notaFiscal) {
+        Connection con = Conexao.getConnection();
+        PreparedStatement stmt = null;
+
+        try {
+            stmt = con.prepareStatement(
+                    "UPDATE venda SET Finalizada = 1 WHERE NotaFiscal_Saida = ?");
+            stmt.setInt(1, notaFiscal);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao finalizar venda: " + e);
         } finally {
             Conexao.closeConnection(con, stmt);
         }

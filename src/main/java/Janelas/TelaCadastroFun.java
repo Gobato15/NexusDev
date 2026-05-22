@@ -6,6 +6,7 @@ package Janelas;
 import DAO.FuncionarioDAO;
 import Objetos.Funcionario;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.HeadlessException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -30,12 +31,12 @@ public class TelaCadastroFun extends javax.swing.JFrame {
     
     public TelaCadastroFun(Menu menu) {
         initComponents();
-        getContentPane().setBackground(Color.GRAY);
         this.menu = menu;
         
         jBoxFun.removeAllItems();    
-        jBoxFun.addItem("Gerente");
-        jBoxFun.addItem("Funcionário");  
+        jBoxFun.addItem("Administrador");
+        jBoxFun.addItem("Usuário");  
+        jBoxFun.setSelectedItem("Usuário");
         
         modelo = new DefaultTableModel(
             new Object[][]{},
@@ -43,8 +44,8 @@ public class TelaCadastroFun extends javax.swing.JFrame {
         );
         jTTable1.setModel(modelo);
         
-        
         carregarTabelaFuncionarios();
+        styleComponents();
         
          // Ao clicar na tabela, preenche os campos automaticamente
         jTTable1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -95,22 +96,19 @@ public class TelaCadastroFun extends javax.swing.JFrame {
                 }
             }
         });
-        // ESTILIZAÇÃO DO BOTÃO X - Fica vermelho ao passar o mouse
-        jBlimpar.setBackground(new java.awt.Color(240, 240, 240));
-        jBlimpar.setForeground(java.awt.Color.BLACK);
-        jBlimpar.setFocusPainted(false);
-        jBlimpar.setBorderPainted(false);
+        // O botão Limpar será estilizado dentro de styleComponents()
+        // Estilização dinâmica do botão Limpar
 
         jBlimpar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jBlimpar.setBackground(new java.awt.Color(220, 53, 69)); // Vermelho
-                jBlimpar.setForeground(java.awt.Color.BLACK);
+                jBlimpar.setBackground(new java.awt.Color(220, 53, 69)); // Vermelho elegante
+                jBlimpar.setForeground(java.awt.Color.WHITE);
                 jBlimpar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
             }
 
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                jBlimpar.setBackground(new java.awt.Color(240, 240, 240)); // Cinza
-                jBlimpar.setForeground(java.awt.Color.BLACK);
+                jBlimpar.setBackground(new java.awt.Color(45, 45, 45)); // Volta ao padrão dark
+                jBlimpar.setForeground(java.awt.Color.WHITE);
                 jBlimpar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
             }
         });
@@ -318,9 +316,9 @@ public class TelaCadastroFun extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jBExcluir)
                         .addGap(18, 18, 18)
-                        .addComponent(jBvoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jBvoltar)
                         .addGap(18, 18, 18)
-                        .addComponent(jBlimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jBlimpar)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -392,7 +390,7 @@ public class TelaCadastroFun extends javax.swing.JFrame {
                     .addComponent(jBAtualizar)
                     .addComponent(jBExcluir)
                     .addComponent(jBvoltar)
-                    .addComponent(jBlimpar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jBlimpar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -510,9 +508,9 @@ public class TelaCadastroFun extends javax.swing.JFrame {
                 Funcionario f = new Funcionario();
                 f.setCpf(cpf);
                 
-                // Deleta do banco
+                // Desativa do banco (Soft Delete)
                 FuncionarioDAO dao = new FuncionarioDAO();
-                dao.delete(f);
+                dao.desativar(cpf);
                 
                 // Mensagem de sucesso
                 JOptionPane.showMessageDialog(this, "Funcionário excluído com sucesso!");
@@ -602,6 +600,57 @@ public class TelaCadastroFun extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jBvoltarActionPerformed
 
+    private void styleComponents() {
+        getContentPane().setBackground(new Color(30, 30, 30));
+        jPanel1.setBackground(new Color(30, 30, 30));
+        
+        // Labels
+        javax.swing.JLabel[] labels = {jLabel1, jLabel2, jLabel3, jLabel4, jLabel5, jLabel6, jLabel7, jLabel8, jLabel9};
+        for (javax.swing.JLabel lbl : labels) {
+            lbl.setForeground(Color.WHITE);
+        }
+        jLabel1.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 24));
+
+        // TextFields
+        javax.swing.JTextField[] fields = {jTNomeFun, jTCPF, jTTelefone, jTEmailFun, jTCepFun, jTNumeroFun, jTSenha};
+        for (javax.swing.JTextField fld : fields) {
+            fld.setBackground(new Color(60, 60, 60));
+            fld.setForeground(Color.WHITE);
+            fld.setCaretColor(Color.WHITE);
+            fld.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(80, 80, 80)));
+        }
+
+        // Buttons
+        javax.swing.JButton[] botoes = {jBConfirmar, jBAtualizar, jBExcluir, jBvoltar, jBlimpar};
+                for (javax.swing.JButton btn : botoes) {
+            btn.setBackground(new java.awt.Color(45, 45, 45));
+            btn.setForeground(java.awt.Color.WHITE);
+            btn.setFocusPainted(false);
+            btn.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
+            btn.setPreferredSize(new java.awt.Dimension(160, 40));
+            btn.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(70, 70, 70)));
+            btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        }
+        jBConfirmar.setBackground(new Color(0, 100, 0));
+        jBAtualizar.setBackground(new Color(0, 120, 215));
+        jBExcluir.setBackground(new Color(150, 0, 0));
+
+        // Table
+        jTTable1.setBackground(new Color(60, 60, 60));
+        jTTable1.setForeground(Color.WHITE);
+        jTTable1.setGridColor(new Color(80, 80, 80));
+        jTTable1.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
+        jTTable1.setRowHeight(25);
+        jTTable1.setSelectionBackground(new Color(0, 100, 0, 80));
+        jTTable1.setSelectionForeground(Color.WHITE);
+        jTTable1.getTableHeader().setBackground(new Color(30, 30, 30));
+        jTTable1.getTableHeader().setForeground(Color.WHITE);
+        jTTable1.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 14));
+        jTTable1.setFillsViewportHeight(true);
+        jScrollPane1.getViewport().setBackground(new Color(45, 45, 45));
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+    }
+
     private void jBlimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBlimparActionPerformed
         // LIMPA TODOS OS CAMPOS
         jTNomeFun.setText("");
@@ -621,7 +670,7 @@ public class TelaCadastroFun extends javax.swing.JFrame {
     }//GEN-LAST:event_jBlimparActionPerformed
     
     // MÉTODO PARA CARREGAR FUNCIONÁRIOS DO BANCO
-    private void carregarTabelaFuncionarios() {
+    public void carregarTabelaFuncionarios() {
         try {
             // Limpa a tabela antes de carregar
             modelo.setRowCount(0);
@@ -682,6 +731,10 @@ public class TelaCadastroFun extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> {
             new TelaCadastroFun().setVisible(true);
         });
+    }
+
+    private void jBVerExcluidosActionPerformed(java.awt.event.ActionEvent evt) {
+        new Fun_Inativos(this).setVisible(true);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -29,7 +29,7 @@ public class Drogaria extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         jTTabelaDrogaria.setModel(modelo);
         modelo.recarregaTabela();
-        getContentPane().setBackground(Color.GRAY);
+        styleComponents();
     }
     
     public Drogaria() {
@@ -321,13 +321,64 @@ public class Drogaria extends javax.swing.JFrame {
     }//GEN-LAST:event_jBExcluirDrogariaActionPerformed
 
     private void jBDesativadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBDesativadosActionPerformed
-        Drog_Inativos d = new Drog_Inativos();
+        Drog_Inativos d = new Drog_Inativos(modelo);
         d.setVisible(true);
     }//GEN-LAST:event_jBDesativadosActionPerformed
 
     private void jTCNPJDrograriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTCNPJDrograriaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTCNPJDrograriaActionPerformed
+
+    private void styleComponents() {
+        getContentPane().setBackground(new Color(30, 30, 30));
+        
+        // Labels
+        javax.swing.JLabel[] labels = {jLabel1, jLabel2, jLabel3, jLabel5, jLabel6, jLabel7, jLabel8};
+        for (javax.swing.JLabel lbl : labels) {
+            lbl.setForeground(Color.WHITE);
+        }
+        jLabel1.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 24));
+
+        // TextFields
+        javax.swing.JTextField[] fields = {jTNomeDrogaria, jTCNPJDrograria, jTCEPDrogaria, jTEmailDrogaria, jTNumeroDrogaria, jTTelDrogaria};
+        for (javax.swing.JTextField fld : fields) {
+            fld.setBackground(new Color(60, 60, 60));
+            fld.setForeground(Color.WHITE);
+            fld.setCaretColor(Color.WHITE);
+            fld.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(80, 80, 80)));
+        }
+
+        // Buttons
+        javax.swing.JButton[] botoes = {jBCadastrarDrogaria, jBAlterarDrogaria, jBExcluirDrogaria, jBDesativados, jBVoltarDrogaria};
+                for (javax.swing.JButton btn : botoes) {
+            btn.setBackground(new java.awt.Color(45, 45, 45));
+            btn.setForeground(java.awt.Color.WHITE);
+            btn.setFocusPainted(false);
+            btn.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
+            btn.setPreferredSize(new java.awt.Dimension(160, 40));
+            btn.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(70, 70, 70)));
+            btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        }
+        jBCadastrarDrogaria.setBackground(new Color(0, 100, 0));
+        jBAlterarDrogaria.setBackground(new Color(0, 120, 215));
+        jBExcluirDrogaria.setBackground(new Color(150, 0, 0));
+        jBDesativados.setBackground(new Color(100, 100, 0));
+
+        // Table
+        jTTabelaDrogaria.setBackground(new Color(60, 60, 60));
+        jTTabelaDrogaria.setForeground(Color.WHITE);
+        jTTabelaDrogaria.setGridColor(new Color(80, 80, 80));
+        jTTabelaDrogaria.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
+        jTTabelaDrogaria.setRowHeight(25);
+        jTTabelaDrogaria.setSelectionBackground(new Color(0, 100, 0, 80));
+        jTTabelaDrogaria.setSelectionForeground(Color.WHITE);
+        jTTabelaDrogaria.getTableHeader().setBackground(new Color(30, 30, 30));
+        jTTabelaDrogaria.getTableHeader().setForeground(Color.WHITE);
+        jTTabelaDrogaria.getTableHeader().setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
+        jTTabelaDrogaria.setFillsViewportHeight(true);
+        jScrollPane1.getViewport().setBackground(new Color(45, 45, 45));
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+    }
 
     private void LimpaCampos() {
         jTCEPDrogaria.setText("");

@@ -29,7 +29,7 @@ public class JanelaLaboratorio extends javax.swing.JFrame {
 
         jTTabelaLab.setModel(modelo);
         modelo.recarregaTabela();
-        getContentPane().setBackground(Color.GRAY);
+        styleComponents();
     }
 
     public JanelaLaboratorio() {
@@ -320,9 +320,60 @@ public class JanelaLaboratorio extends javax.swing.JFrame {
     }//GEN-LAST:event_jTNomeLaboratorioActionPerformed
 
     private void jBDesativadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBDesativadosActionPerformed
-        Lab_Inativos l = new Lab_Inativos();
+        Lab_Inativos l = new Lab_Inativos(modelo);
         l.setVisible(true);
     }//GEN-LAST:event_jBDesativadosActionPerformed
+
+    private void styleComponents() {
+        getContentPane().setBackground(new Color(30, 30, 30));
+        
+        // Labels
+        javax.swing.JLabel[] labels = {jLabel1, jLabel2, jLabel3, jLabel5, jLabel6, jLabel7, jLabel8};
+        for (javax.swing.JLabel lbl : labels) {
+            lbl.setForeground(Color.WHITE);
+        }
+        jLabel1.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 24));
+
+        // TextFields
+        javax.swing.JTextField[] fields = {jTNomeLaboratorio, jTCNPJLaboratorio, jTCEPLaboratorio, jTEmailLaboratorio, jTNumeroLaboratorio, jTTelLaboratorio};
+        for (javax.swing.JTextField fld : fields) {
+            fld.setBackground(new Color(60, 60, 60));
+            fld.setForeground(Color.WHITE);
+            fld.setCaretColor(Color.WHITE);
+            fld.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(80, 80, 80)));
+        }
+
+        // Buttons
+        javax.swing.JButton[] botoes = {jBCadastrarLaboratorio, jBAlterarLaboratorio, jBExcluirLaboratorio, jBDesativados, jBVoltarLaboratorio};
+                for (javax.swing.JButton btn : botoes) {
+            btn.setBackground(new java.awt.Color(45, 45, 45));
+            btn.setForeground(java.awt.Color.WHITE);
+            btn.setFocusPainted(false);
+            btn.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
+            btn.setPreferredSize(new java.awt.Dimension(160, 40));
+            btn.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(70, 70, 70)));
+            btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        }
+        jBCadastrarLaboratorio.setBackground(new Color(0, 100, 0));
+        jBAlterarLaboratorio.setBackground(new Color(0, 120, 215));
+        jBExcluirLaboratorio.setBackground(new Color(150, 0, 0));
+        jBDesativados.setBackground(new Color(100, 100, 0));
+
+        // Table
+        jTTabelaLab.setBackground(new Color(60, 60, 60));
+        jTTabelaLab.setForeground(Color.WHITE);
+        jTTabelaLab.setGridColor(new Color(80, 80, 80));
+        jTTabelaLab.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
+        jTTabelaLab.setRowHeight(25);
+        jTTabelaLab.setSelectionBackground(new Color(0, 100, 0, 80));
+        jTTabelaLab.setSelectionForeground(Color.WHITE);
+        jTTabelaLab.getTableHeader().setBackground(new Color(30, 30, 30));
+        jTTabelaLab.getTableHeader().setForeground(Color.WHITE);
+        jTTabelaLab.getTableHeader().setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
+        jTTabelaLab.setFillsViewportHeight(true);
+        jScrollPane1.getViewport().setBackground(new Color(45, 45, 45));
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+    }
 
     private void limpaCampos() {
         jTCEPLaboratorio.setText("");

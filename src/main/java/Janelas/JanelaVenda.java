@@ -36,14 +36,13 @@ public class JanelaVenda extends javax.swing.JFrame {
     public JanelaVenda() {
         initComponents();
         this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
-
+        styleComponents();
     }
 
     public JanelaVenda(Funcionario user, Menu menu) {
         initComponents();
         this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         this.setLocationRelativeTo(null);
-        getContentPane().setBackground(Color.GRAY);
         this.menu = menu;
         this.user = user;
         this.cpf = user.getCpf();
@@ -51,6 +50,7 @@ public class JanelaVenda extends javax.swing.JFrame {
         jBCadastrarVenda.setEnabled(true);
         jTTabelaMed.setModel(modelo);
         modelo.recarregaTabela();
+        styleComponents();
 
     }
 
@@ -210,7 +210,7 @@ public class JanelaVenda extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBCadastrarVendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBCadastrarVendaActionPerformed
-        iniciarCompra();
+        iniciarVenda();
     }//GEN-LAST:event_jBCadastrarVendaActionPerformed
 
     private void jBVoltarCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBVoltarCompraActionPerformed
@@ -259,7 +259,7 @@ public class JanelaVenda extends javax.swing.JFrame {
 
         modelo.setVendas(filtradas);
     }//GEN-LAST:event_jCFiltroDrogariaActionPerformed
-    private void iniciarCompra() {
+    private void iniciarVenda() {
         // Validação: garante que há um funcionário logado
         if (cpf == null || cpf.trim().isEmpty()) {
             JOptionPane.showMessageDialog(this,
@@ -302,6 +302,48 @@ public class JanelaVenda extends javax.swing.JFrame {
                     JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
+    }
+
+    private void styleComponents() {
+        getContentPane().setBackground(new Color(30, 30, 30));
+        
+        // Labels
+        jLabel1.setForeground(Color.WHITE);
+        jLabel1.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 24));
+        jLabel2.setForeground(Color.WHITE);
+
+        // Buttons
+        javax.swing.JButton[] botoes = {jBCadastrarVenda, jBVoltarCompra};
+                for (javax.swing.JButton btn : botoes) {
+            btn.setBackground(new java.awt.Color(45, 45, 45));
+            btn.setForeground(java.awt.Color.WHITE);
+            btn.setFocusPainted(false);
+            btn.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
+            btn.setPreferredSize(new java.awt.Dimension(160, 40));
+            btn.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(70, 70, 70)));
+            btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        }
+        jBCadastrarVenda.setBackground(new Color(0, 100, 0)); // Verde para iniciar
+
+        // Combo Box
+        jCFiltroDrogaria.setBackground(new Color(60, 60, 60));
+        jCFiltroDrogaria.setForeground(Color.WHITE);
+        jCFiltroDrogaria.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(80, 80, 80)));
+
+        // Table
+        jTTabelaMed.setBackground(new Color(60, 60, 60));
+        jTTabelaMed.setForeground(Color.WHITE);
+        jTTabelaMed.setGridColor(new Color(80, 80, 80));
+        jTTabelaMed.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
+        jTTabelaMed.setRowHeight(25);
+        jTTabelaMed.setSelectionBackground(new Color(0, 100, 0, 80));
+        jTTabelaMed.setSelectionForeground(Color.WHITE);
+        jTTabelaMed.getTableHeader().setBackground(new Color(30, 30, 30));
+        jTTabelaMed.getTableHeader().setForeground(Color.WHITE);
+        jTTabelaMed.getTableHeader().setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
+        jTTabelaMed.setFillsViewportHeight(true);
+        jScrollPane2.getViewport().setBackground(new Color(45, 45, 45));
+        jScrollPane2.setBorder(javax.swing.BorderFactory.createEmptyBorder());
     }
 
     /**

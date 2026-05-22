@@ -1,38 +1,34 @@
 package Janelas;
 
-import DAO.DrogariaDAO;
-import Model.DrogariaTableModel;
-import Objetos.DrogariaObjeto;
+import DAO.FuncionarioDAO;
+import Objetos.Funcionario;
 import java.awt.Color;
-import java.awt.Font;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
-public class Drog_Inativos extends javax.swing.JFrame {
+public class Fun_Inativos extends javax.swing.JFrame {
 
-    DrogariaTableModel modelo = new DrogariaTableModel();
-    private DrogariaTableModel parentModelo;
+    DefaultTableModel modelo = new DefaultTableModel();
+    private TelaCadastroFun parentJanela;
 
-    public Drog_Inativos() {
+    public Fun_Inativos() {
         initComponents();
         this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         this.setLocationRelativeTo(null);
+        
+        modelo = new DefaultTableModel(
+            new Object[][]{},
+            new String[]{"Nome", "CPF", "Telefone", "E-mail", "Função"}
+        );
         jTInativos.setModel(modelo);
-        modelo.recarregaTabelaInativos();
         styleComponents();
+        recarregaTabela();
     }
 
-    public Drog_Inativos(DrogariaTableModel parentModelo) {
+    public Fun_Inativos(TelaCadastroFun parentJanela) {
         this();
-        this.parentModelo = parentModelo;
-        this.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosed(java.awt.event.WindowEvent windowEvent) {
-                if (parentModelo != null) {
-                    parentModelo.recarregaTabela();
-                }
-            }
-        });
+        this.parentJanela = parentJanela;
     }
 
     private void styleComponents() {
@@ -75,22 +71,45 @@ public class Drog_Inativos extends javax.swing.JFrame {
         jScrollPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder());
     }
 
+    private void recarregaTabela() {
+        modelo.setRowCount(0);
+        FuncionarioDAO dao = new FuncionarioDAO();
+        List<Funcionario> lista = dao.readExcluidos();
+        for (Funcionario f : lista) {
+            modelo.addRow(new Object[]{
+                f.getNome_Fun(),
+                f.getCpf(),
+                f.getTelefone_Fun(),
+                f.getEmail_Fun(),
+                f.getFuncao()
+            });
+        }
+    }
+
     @SuppressWarnings("unchecked")
     private void initComponents() {
 
-        jBReativar = new javax.swing.JButton();
-        jBVoltar = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTInativos = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
+        jBReativar = new javax.swing.JButton();
+        jBVoltar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Drogarias Desativadas");
+        setTitle("Funcionários Excluídos");
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); 
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("DROGARIAS DESATIVADAS");
+        jLabel1.setText("FUNCIONÁRIOS EXCLUÍDOS");
+
+        jTInativos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {},
+            new String [] {
+                "Nome", "CPF", "Telefone", "E-mail", "Função"
+            }
+        ));
+        jScrollPane1.setViewportView(jTInativos);
 
         jBReativar.setBackground(new java.awt.Color(40, 167, 69));
         jBReativar.setFont(new java.awt.Font("Segoe UI", 1, 14)); 
@@ -111,14 +130,6 @@ public class Drog_Inativos extends javax.swing.JFrame {
                 jBVoltarActionPerformed(evt);
             }
         });
-
-        jTInativos.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {},
-            new String [] {
-                "Nome", "CNPJ", "Telefone", "E-mail", "Número", "CEP"
-            }
-        ));
-        jScrollPane1.setViewportView(jTInativos);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -153,14 +164,17 @@ public class Drog_Inativos extends javax.swing.JFrame {
     }
 
     private void jBReativarActionPerformed(java.awt.event.ActionEvent evt) {
-        if (jTInativos.getSelectedRow() != -1) {
-            DrogariaObjeto d = modelo.pegaDadosLinha(jTInativos.getSelectedRow());
-            DrogariaDAO dao = new DrogariaDAO();
-            dao.ativar(d);
-            modelo.recarregaTabelaInativos();
-            if (parentModelo != null) {
-                parentModelo.recarregaTabela();
+        int selectedRow = jTInativos.getSelectedRow();
+        if (selectedRow != -1) {
+            String cpf = modelo.getValueAt(selectedRow, 1).toString();
+            FuncionarioDAO dao = new FuncionarioDAO();
+            dao.reativar(cpf);
+            recarregaTabela();
+            if (parentJanela != null) {
+                parentJanela.carregarTabelaFuncionarios();
             }
+        } else {
+            JOptionPane.showMessageDialog(this, "Selecione um funcionário para reativar!");
         }
     }
 
@@ -170,7 +184,7 @@ public class Drog_Inativos extends javax.swing.JFrame {
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(() -> {
-            new Drog_Inativos().setVisible(true);
+            new Fun_Inativos().setVisible(true);
         });
     }
 

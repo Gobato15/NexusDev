@@ -99,7 +99,7 @@ public List<DrogariaObjeto> readInativos() {
         PreparedStatement stmt = null;
 
         try {
-            stmt = con.prepareStatement("UPDATE drogaria (Nome_Drog = ?, Telefone_Drog = ?, Cep_Drog = ?, Num_Drog = ?, Email_Drog = ? where CNPJ_Drog = ?");
+            stmt = con.prepareStatement("UPDATE drogaria SET Nome_Drog = ?, Telefone_Drog = ?, Cep_Drog = ?, Num_Drog = ?, Email_Drog = ? where CNPJ_Drog = ?");
             stmt.setString(1, d.getNomeDrogaria());
             stmt.setString(2, d.getTelefoneDrogaria());
             stmt.setString(3, d.getCepDrogaria());

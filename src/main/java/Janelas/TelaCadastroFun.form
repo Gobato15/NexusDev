@@ -70,9 +70,9 @@
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jBExcluir" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="jBvoltar" min="-2" pref="102" max="-2" attributes="0"/>
+                      <Component id="jBvoltar" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="jBlimpar" min="-2" pref="73" max="-2" attributes="0"/>
+                      <Component id="jBlimpar" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
@@ -166,7 +166,7 @@
                   <Component id="jBAtualizar" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jBExcluir" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jBvoltar" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jBlimpar" alignment="1" max="32767" attributes="0"/>
+                  <Component id="jBlimpar" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="jPanel2" min="-2" max="-2" attributes="0"/>

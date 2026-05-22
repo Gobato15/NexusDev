@@ -16,8 +16,7 @@ public class ItensTableModel extends AbstractTableModel {
         "Quantidade",
         "Valor Unitário",
         "Subtotal",
-        "Data de Validade",
-        "Nota Fiscal"
+        "Data de Validade"
     };
 
     @Override
@@ -44,7 +43,6 @@ public class ItensTableModel extends AbstractTableModel {
             case 2: return String.format("R$ %.2f", item.getValorItem());
             case 3: return String.format("R$ %.2f", item.getValorItem() * item.getQuantidadeItem());
             case 4: return item.getDataValItem();
-            case 5: return item.getNotaFiscalCompraItem();
             default: return null;
         }
     }
@@ -65,9 +63,6 @@ public class ItensTableModel extends AbstractTableModel {
                 break;
             case 4:
                 dados.get(linha).setDataValItem((String) valor);
-                break;
-            case 5:
-                dados.get(linha).setNotaFiscalCompraItem(Integer.parseInt((String) valor));
                 break;
         }
         this.fireTableRowsUpdated(linha, linha);
@@ -110,5 +105,27 @@ public class ItensTableModel extends AbstractTableModel {
         this.dados.clear();
         this.dados.addAll(itens);
         fireTableDataChanged();
+    }
+
+    /**
+     * Procura item pelo Cod_CatMed no carrinho.
+     * @return índice da linha ou -1 se não encontrado
+     */
+    public int findByCodCatMed(int codCatMed) {
+        for (int i = 0; i < dados.size(); i++) {
+            if (dados.get(i).getCodCatMedItem() == codCatMed) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Incrementa a quantidade de um item já existente no carrinho.
+     */
+    public void incrementarQuantidade(int linha, int qtdAdicional) {
+        Itens item = dados.get(linha);
+        item.setQuantidadeItem(item.getQuantidadeItem() + qtdAdicional);
+        fireTableRowsUpdated(linha, linha);
     }
 }
