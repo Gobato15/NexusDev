@@ -22,7 +22,7 @@ public class MedicamentoDAO {
         ResultSet rs = null;
         List<Medicamento> medicamentos = new ArrayList<>();
         try {
-            stmt = con.prepareStatement("SELECT * FROM medicamento WHERE Qtd_Med > 0");
+            stmt = con.prepareStatement("SELECT * FROM medicamento WHERE Qtd_Med > 0 AND Ativo_Med = 1");
             rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -99,17 +99,64 @@ public class MedicamentoDAO {
         PreparedStatement stmt = null;
 
         try {
-            stmt = con.prepareStatement("DELETE FROM medicamento where Cod_Med = ?");
+            stmt = con.prepareStatement("UPDATE medicamento SET Ativo_Med = 0 where Cod_Med = ?");
             stmt.setInt(1, m.getCodMed());
 
             stmt.execute();
             JOptionPane.showMessageDialog(null, "Medicamento removido com sucesso!");
 
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Falha ao remover: " + e);
+            JOptionPane.showMessageDialog(null, "Falha ao desativar: " + e);
         } finally {
             Conexao.closeConnection(con, stmt);
         }
+    }
+
+    public void ativar(Medicamento m) {
+        Connection con = Conexao.getConnection();
+        PreparedStatement stmt = null;
+
+        try {
+            stmt = con.prepareStatement("UPDATE medicamento SET Ativo_Med = 1 where Cod_Med = ?");
+            stmt.setInt(1, m.getCodMed());
+
+            stmt.execute();
+            JOptionPane.showMessageDialog(null, "Medicamento reativado com sucesso!");
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Falha ao reativar: " + e);
+        } finally {
+            Conexao.closeConnection(con, stmt);
+        }
+    }
+
+    public List<Medicamento> readInativos() {
+        Connection con = Conexao.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        List<Medicamento> medicamentos = new ArrayList<>();
+        try {
+            stmt = con.prepareStatement("SELECT * FROM medicamento WHERE Ativo_Med = 0");
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Medicamento m = new Medicamento();
+                m.setCodMed(rs.getInt("Cod_Med"));
+                m.setNomeMed(rs.getString("Nome_Med"));
+                m.setDescricaoMed(rs.getString("Desc_Med"));
+                m.setDataValidadeMed(rs.getString("DataVal_Med"));
+                m.setQuantidadeMed(rs.getInt("Qtd_Med"));
+                m.setValorMed(rs.getDouble("Valor_Med"));
+                m.setCodCatMed(rs.getInt("Cod_CatMed"));
+
+                medicamentos.add(m);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Falha ao obter dados inativos: " + e);
+        } finally {
+            Conexao.closeConnection(con, stmt, rs);
+        }
+        return medicamentos;
     }
 
     public int createAndReturnId(Medicamento med) {

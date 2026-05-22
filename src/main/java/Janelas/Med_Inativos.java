@@ -1,28 +1,28 @@
 package Janelas;
 
-import DAO.DrogariaDAO;
-import Model.DrogariaTableModel;
-import Objetos.DrogariaObjeto;
+import DAO.MedicamentoDAO;
+import Model.MedicamentoTableModel;
+import Objetos.Medicamento;
 import java.awt.Color;
 import java.awt.Font;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
 
-public class Drog_Inativos extends javax.swing.JFrame {
+public class Med_Inativos extends javax.swing.JFrame {
 
-    DrogariaTableModel modelo = new DrogariaTableModel();
-    private DrogariaTableModel parentModelo;
+    MedicamentoTableModel modelo = new MedicamentoTableModel();
+    private MedicamentoTableModel parentModelo;
 
-    public Drog_Inativos() {
+    public Med_Inativos() {
         initComponents();
         this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         this.setLocationRelativeTo(null);
         jTInativos.setModel(modelo);
         modelo.recarregaTabelaInativos();
+        
+        // Estilização Premium
         styleComponents();
     }
 
-    public Drog_Inativos(DrogariaTableModel parentModelo) {
+    public Med_Inativos(MedicamentoTableModel parentModelo) {
         this();
         this.parentModelo = parentModelo;
         this.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -36,89 +36,68 @@ public class Drog_Inativos extends javax.swing.JFrame {
     }
 
     private void styleComponents() {
-        Color darkBg = new Color(30, 30, 30);
-        Color surfaceBg = new Color(45, 45, 45);
-        Color fieldBg = new Color(60, 60, 60);
-
-        getContentPane().setBackground(darkBg);
+        getContentPane().setBackground(new Color(45, 45, 45));
         
-        // Label
         jLabel1.setForeground(Color.WHITE);
-        jLabel1.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 24));
-
-        // Buttons
-        javax.swing.JButton[] botoes = {jBReativar, jBVoltar};
-                for (javax.swing.JButton btn : botoes) {
-            btn.setBackground(new java.awt.Color(45, 45, 45));
-            btn.setForeground(java.awt.Color.WHITE);
-            btn.setFocusPainted(false);
-            btn.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
-            btn.setPreferredSize(new java.awt.Dimension(160, 40));
-            btn.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(70, 70, 70)));
-            btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        }
-        jBReativar.setBackground(new Color(40, 167, 69));
-
-        // Table
-        jTInativos.setBackground(fieldBg);
+        jLabel1.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        
+        jTInativos.setBackground(new Color(60, 60, 60));
         jTInativos.setForeground(Color.WHITE);
         jTInativos.setGridColor(new Color(80, 80, 80));
-        jTInativos.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
+        jTInativos.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         jTInativos.setRowHeight(25);
         jTInativos.setSelectionBackground(new Color(0, 100, 0, 80));
         jTInativos.setSelectionForeground(Color.WHITE);
-        jTInativos.getTableHeader().setBackground(darkBg);
+        jTInativos.getTableHeader().setBackground(new Color(30, 30, 30));
         jTInativos.getTableHeader().setForeground(Color.WHITE);
-        jTInativos.getTableHeader().setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
-        jTInativos.setFillsViewportHeight(true);
-        jScrollPane1.getViewport().setBackground(surfaceBg);
-        jScrollPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        jTInativos.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 14));
+        jScrollPane1.getViewport().setBackground(new Color(45, 45, 45));
+
+        jBReativar.setBackground(new Color(40, 167, 69));
+        jBReativar.setForeground(Color.WHITE);
+        jBReativar.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        jBReativar.setPreferredSize(new java.awt.Dimension(160, 40));
+        jBReativar.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(70, 70, 70)));
+        jBReativar.setFocusPainted(false);
+        jBReativar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        
+        jBVoltar.setBackground(new Color(45, 45, 45));
+        jBVoltar.setForeground(Color.WHITE);
+        jBVoltar.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        jBVoltar.setPreferredSize(new java.awt.Dimension(160, 40));
+        jBVoltar.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(70, 70, 70)));
+        jBVoltar.setFocusPainted(false);
+        jBVoltar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
     }
 
     @SuppressWarnings("unchecked")
     private void initComponents() {
 
-        jBReativar = new javax.swing.JButton();
-        jBVoltar = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTInativos = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
+        jBReativar = new javax.swing.JButton();
+        jBVoltar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Drogarias Desativadas");
+        setTitle("Medicamentos Desativados");
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); 
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("DROGARIAS DESATIVADAS");
-
-        jBReativar.setBackground(new java.awt.Color(40, 167, 69));
-        jBReativar.setFont(new java.awt.Font("Segoe UI", 1, 14)); 
-        jBReativar.setForeground(new java.awt.Color(255, 255, 255));
-        jBReativar.setText("REATIVAR SELECIONADO");
-        jBReativar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBReativarActionPerformed(evt);
-            }
-        });
-
-        jBVoltar.setBackground(new java.awt.Color(108, 117, 125));
-        jBVoltar.setFont(new java.awt.Font("Segoe UI", 1, 14)); 
-        jBVoltar.setForeground(new java.awt.Color(255, 255, 255));
-        jBVoltar.setText("VOLTAR");
-        jBVoltar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBVoltarActionPerformed(evt);
-            }
-        });
+        jLabel1.setText("MEDICAMENTOS DESATIVADOS");
 
         jTInativos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {},
             new String [] {
-                "Nome", "CNPJ", "Telefone", "E-mail", "Número", "CEP"
+                "Nome", "Descrição", "Quantidade", "Valor", "Validade", "Cód. Catálogo"
             }
         ));
         jScrollPane1.setViewportView(jTInativos);
+
+        jBReativar.setText("REATIVAR SELECIONADO");
+        jBReativar.addActionListener(evt -> jBReativarActionPerformed(evt));
+
+        jBVoltar.setText("VOLTAR");
+        jBVoltar.addActionListener(evt -> jBVoltarActionPerformed(evt));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -154,9 +133,9 @@ public class Drog_Inativos extends javax.swing.JFrame {
 
     private void jBReativarActionPerformed(java.awt.event.ActionEvent evt) {
         if (jTInativos.getSelectedRow() != -1) {
-            DrogariaObjeto d = modelo.pegaDadosLinha(jTInativos.getSelectedRow());
-            DrogariaDAO dao = new DrogariaDAO();
-            dao.ativar(d);
+            Medicamento m = modelo.pegaDadosLinha(jTInativos.getSelectedRow());
+            MedicamentoDAO dao = new MedicamentoDAO();
+            dao.ativar(m);
             modelo.recarregaTabelaInativos();
             if (parentModelo != null) {
                 parentModelo.recarregaTabela();
@@ -169,9 +148,7 @@ public class Drog_Inativos extends javax.swing.JFrame {
     }
 
     public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(() -> {
-            new Drog_Inativos().setVisible(true);
-        });
+        java.awt.EventQueue.invokeLater(() -> new Med_Inativos().setVisible(true));
     }
 
     private javax.swing.JButton jBReativar;

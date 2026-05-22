@@ -61,11 +61,6 @@ public class ItensDAO {
 
             stmt.execute();
 
-            double total = totalDaNota(i.getNotaFiscalCompraItem());
-            new CompraDAO().atualizarValorTotal(i.getNotaFiscalCompraItem(), total);
-
-            JOptionPane.showMessageDialog(null, "Item cadastrado com sucesso!");
-
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Erro ao cadastrar: " + e);
         } finally {

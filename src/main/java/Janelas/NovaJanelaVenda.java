@@ -48,6 +48,7 @@ public class NovaJanelaVenda extends javax.swing.JFrame {
 
     public NovaJanelaVenda(Funcionario user, int notaGerada, String cpf, String cnpj, Menu menu) {
         initComponents();
+        this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         this.user = user;
         carregarDrogarias();
         this.menu = menu;
@@ -61,13 +62,13 @@ public class NovaJanelaVenda extends javax.swing.JFrame {
         jTTabelaItensCompra.setModel(modeloItem);
         atualizarValorTotal();
 
-        getContentPane().setBackground(Color.GRAY);
         jCDrogarias.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 verificarHabilitacaoBotao();
             }
         });
+        styleComponents();
     }
 
     private void verificarHabilitacaoBotao() {
@@ -127,6 +128,78 @@ public class NovaJanelaVenda extends javax.swing.JFrame {
         verificarHabilitacaoBotao();
     }
 
+    private void styleComponents() {
+        Color darkBg = new Color(30, 30, 30);
+        Color surfaceBg = new Color(45, 45, 45);
+        Color fieldBg = new Color(60, 60, 60);
+
+        getContentPane().setBackground(darkBg);
+        
+        // Panels styling
+        if (getContentPane() instanceof javax.swing.JPanel) {
+            javax.swing.JPanel main = (javax.swing.JPanel) getContentPane();
+            main.setBackground(darkBg);
+            for (java.awt.Component c : main.getComponents()) {
+                if (c instanceof javax.swing.JPanel) {
+                    ((javax.swing.JPanel) c).setBackground(darkBg);
+                    for (java.awt.Component subC : ((javax.swing.JPanel) c).getComponents()) {
+                        if (subC instanceof javax.swing.JPanel) {
+                            ((javax.swing.JPanel) subC).setBackground(darkBg);
+                            for (java.awt.Component subSubC : ((javax.swing.JPanel) subC).getComponents()) {
+                                if (subSubC instanceof javax.swing.JLabel) {
+                                    ((javax.swing.JLabel) subSubC).setForeground(Color.WHITE);
+                                }
+                            }
+                        } else if (subC instanceof javax.swing.JLabel) {
+                            ((javax.swing.JLabel) subC).setForeground(Color.WHITE);
+                        }
+                    }
+                } else if (c instanceof javax.swing.JLabel) {
+                    ((javax.swing.JLabel) c).setForeground(Color.WHITE);
+                }
+            }
+        }
+
+        jLabel1.setForeground(Color.WHITE);
+        jLabel4.setForeground(Color.WHITE);
+        jLabel5.setForeground(Color.WHITE);
+        
+        jCDrogarias.setBackground(fieldBg);
+        jCDrogarias.setForeground(Color.WHITE);
+        jCDrogarias.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(80, 80, 80)));
+
+        javax.swing.JButton[] botoes = {jBFinalizarNovaCompra, jBCancelarNovaCompra};
+                for (javax.swing.JButton btn : botoes) {
+            btn.setBackground(new java.awt.Color(45, 45, 45));
+            btn.setForeground(java.awt.Color.WHITE);
+            btn.setFocusPainted(false);
+            btn.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
+            btn.setPreferredSize(new java.awt.Dimension(160, 40));
+            btn.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(70, 70, 70)));
+            btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        }
+        jBFinalizarNovaCompra.setBackground(new Color(0, 100, 0)); // Verde Premium
+        jBCancelarNovaCompra.setBackground(new Color(150, 0, 0)); // Vermelho
+
+        // Tables
+        javax.swing.JTable[] tables = {jTTabelaNovaCompra, jTTabelaItensCompra};
+        javax.swing.JScrollPane[] scrolls = {jScrollPane2, jScrollPane3};
+        
+        for (int i=0; i<tables.length; i++) {
+            tables[i].setBackground(fieldBg);
+            tables[i].setForeground(Color.WHITE);
+            tables[i].setGridColor(new Color(80, 80, 80));
+            tables[i].setRowHeight(25);
+            tables[i].setSelectionBackground(new Color(0, 100, 0, 80));
+            tables[i].setSelectionForeground(Color.WHITE);
+            tables[i].getTableHeader().setBackground(new Color(30, 30, 30));
+            tables[i].getTableHeader().setForeground(Color.WHITE);
+            tables[i].getTableHeader().setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
+            scrolls[i].getViewport().setBackground(surfaceBg);
+            scrolls[i].setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -147,7 +220,13 @@ public class NovaJanelaVenda extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jCDrogarias = new javax.swing.JComboBox<>();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                fecharJanela();
+            }
+        });
         setMinimumSize(new java.awt.Dimension(1920, 1080));
         setPreferredSize(new java.awt.Dimension(1920, 1080));
 
@@ -207,6 +286,7 @@ public class NovaJanelaVenda extends javax.swing.JFrame {
         javax.swing.JPanel bottomTablePanel = new javax.swing.JPanel(new java.awt.BorderLayout(0, 5));
         javax.swing.JLabel lblCarrinho = new javax.swing.JLabel("Itens da Venda (Carrinho)");
         lblCarrinho.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
+        lblCarrinho.setForeground(java.awt.Color.WHITE);
         bottomTablePanel.add(lblCarrinho, java.awt.BorderLayout.NORTH);
 
         jTTabelaItensCompra.setModel(new javax.swing.table.DefaultTableModel(
@@ -236,7 +316,7 @@ public class NovaJanelaVenda extends javax.swing.JFrame {
         javax.swing.JPanel buttonsPanel = new javax.swing.JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
         jBCancelarNovaCompra.setText("Cancelar");
-        jBCancelarNovaCompra.setPreferredSize(new java.awt.Dimension(120, 35));
+        jBCancelarNovaCompra.setPreferredSize(new java.awt.Dimension(160, 40));
         jBCancelarNovaCompra.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBCancelarNovaCompraActionPerformed(evt);
@@ -245,7 +325,7 @@ public class NovaJanelaVenda extends javax.swing.JFrame {
         buttonsPanel.add(jBCancelarNovaCompra);
 
         jBFinalizarNovaCompra.setText("Finalizar");
-        jBFinalizarNovaCompra.setPreferredSize(new java.awt.Dimension(120, 35));
+        jBFinalizarNovaCompra.setPreferredSize(new java.awt.Dimension(160, 40));
         jBFinalizarNovaCompra.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBFinalizarNovaCompraActionPerformed(evt);
@@ -271,6 +351,46 @@ public class NovaJanelaVenda extends javax.swing.JFrame {
                     "Validação",
                     JOptionPane.WARNING_MESSAGE);
             return;
+        }
+
+        // Verificar as quantidades antes de finalizar
+        java.util.Map<Integer, Integer> qtdPorMed = new java.util.HashMap<>();
+        
+        for (int i = 0; i < modeloItem.getRowCount(); i++) {
+            ItensVenda itemVenda = modeloItem.pegaDadosLinha(i);
+            
+            if (itemVenda.getQuantidadeItemVenda() <= 0) {
+                JOptionPane.showMessageDialog(this,
+                        "A quantidade do item '" + itemVenda.getNomeMedItemVenda() + "' deve ser maior que zero!",
+                        "Validação",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
+            int codMed = itemVenda.getCodMedItemVenda();
+            qtdPorMed.put(codMed, qtdPorMed.getOrDefault(codMed, 0) + itemVenda.getQuantidadeItemVenda());
+        }
+
+        for (java.util.Map.Entry<Integer, Integer> entry : qtdPorMed.entrySet()) {
+            int codMed = entry.getKey();
+            int qtdTotalCarrinho = entry.getValue();
+            
+            // Busca o medicamento para verificar se tem estoque
+            Objetos.Medicamento med = null;
+            for (int j = 0; j < modeloMed.getRowCount(); j++) {
+                if (modeloMed.pegaDadosLinha(j).getCodMed() == codMed) {
+                    med = modeloMed.pegaDadosLinha(j);
+                    break;
+                }
+            }
+            
+            if (med != null && qtdTotalCarrinho > med.getQuantidadeMed()) {
+                JOptionPane.showMessageDialog(this,
+                        "A quantidade total do item '" + med.getNomeMed() + "' no carrinho (" + qtdTotalCarrinho + ") excede o estoque disponível (" + med.getQuantidadeMed() + ")!",
+                        "Estoque Insuficiente",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
         }
         if (cnpjDrogaria == null || cnpjDrogaria.trim().isEmpty()) {
             JOptionPane.showMessageDialog(this,
@@ -305,7 +425,7 @@ public class NovaJanelaVenda extends javax.swing.JFrame {
                 vendaDAO.atualizarValorTotal(notaFiscalVenda, valorTotalVenda);
                 vendaDAO.atualizarCnpj(notaFiscalVenda, cnpjDrogaria);
 
-                // Salvar todos os itens da compra
+                // Salvar todos os itens da venda
                 for (int i = 0; i < modeloItem.getRowCount(); i++) {
                     ItensVenda itemVenda = modeloItem.pegaDadosLinha(i);
 
@@ -315,6 +435,10 @@ public class NovaJanelaVenda extends javax.swing.JFrame {
                     // Salva o item no banco
                     itensDAO.create(itemVenda);
                 }
+
+                // Marca a venda como finalizada — dispara trigger trg_finalizar_venda
+                // que decrementa automaticamente o estoque de medicamento
+                vendaDAO.finalizar(notaFiscalVenda);
 
                 JOptionPane.showMessageDialog(this,
                         String.format("Venda finalizada com sucesso!\n"
@@ -355,12 +479,20 @@ public class NovaJanelaVenda extends javax.swing.JFrame {
 
             // Medicamento selecionado
             var medicamento = modeloMed.pegaDadosLinha(linhaSelecionada);
-
             int estoqueDisponivel = medicamento.getQuantidadeMed();
+
+            int quantidadeJaNoCarrinho = 0;
+            for (int i = 0; i < modeloItem.getRowCount(); i++) {
+                ItensVenda it = modeloItem.pegaDadosLinha(i);
+                if (it.getCodMedItemVenda() == medicamento.getCodMed()) {
+                    quantidadeJaNoCarrinho += it.getQuantidadeItemVenda();
+                }
+            }
+            int estoqueRealDisponivel = estoqueDisponivel - quantidadeJaNoCarrinho;
 
             String input = JOptionPane.showInputDialog(
                     this,
-                    "Quantidade do Medicamento\nEstoque disponível: " + estoqueDisponivel);
+                    "Quantidade do Medicamento\nEstoque disponível: " + estoqueRealDisponivel);
             // Cancelou o input
             if (input == null) {
                 return;
@@ -387,25 +519,32 @@ public class NovaJanelaVenda extends javax.swing.JFrame {
                 return;
             }
 
-            // Quantidade maior que o estoque
-            if (QTD_Item > estoqueDisponivel) {
+            // Quantidade maior que o estoque real
+            if (QTD_Item > estoqueRealDisponivel) {
                 JOptionPane.showMessageDialog(
                         this,
-                        "Quantidade solicitada maior que o estoque disponível.\n"
-                                + "Estoque atual: " + estoqueDisponivel,
+                        "Quantidade solicitada maior que o estoque restante disponível.\n"
+                                + "Estoque restante: " + estoqueRealDisponivel,
                         "Estoque insuficiente",
                         JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
-            // PASSOU NA VALIDAÇÃO → adiciona item
-            ItensVenda itemVenda = new ItensVenda();
-            itemVenda.setDataValItemVenda(medicamento.getDataValidadeMed());
-            itemVenda.setValorItemVenda(medicamento.getValorMed());
-            itemVenda.setCodMedItemVenda(medicamento.getCodMed());
-            itemVenda.setQuantidadeItemVenda(QTD_Item);
-
-            modeloItem.addItem(itemVenda);
+            // PASSOU NA VALIDAÇÃO — deduplicação por CodMed
+            int linhaExistente = modeloItem.findByCodMed(medicamento.getCodMed());
+            if (linhaExistente >= 0) {
+                // Já existe no carrinho → incrementa quantidade
+                modeloItem.incrementarQuantidade(linhaExistente, QTD_Item);
+            } else {
+                // Novo item → cria linha
+                ItensVenda itemVenda = new ItensVenda();
+                itemVenda.setDataValItemVenda(medicamento.getDataValidadeMed());
+                itemVenda.setValorItemVenda(medicamento.getValorMed());
+                itemVenda.setCodMedItemVenda(medicamento.getCodMed());
+                itemVenda.setNomeMedItemVenda(medicamento.getNomeMed());
+                itemVenda.setQuantidadeItemVenda(QTD_Item);
+                modeloItem.addItem(itemVenda);
+            }
             atualizarValorTotal();
 
         }
@@ -434,17 +573,23 @@ public class NovaJanelaVenda extends javax.swing.JFrame {
                 JOptionPane.WARNING_MESSAGE);
 
         if (confirma == JOptionPane.YES_OPTION) {
-            // EXCLUI A VENDA NO BANCO
-            Venda v = new Venda();
-            v.setNotaFiscalVenda(notaFiscalVenda);
-
-            VendaDAO dao = new VendaDAO();
-            dao.delete(v);
-            JanelaVenda vmed = new JanelaVenda(user, menu);
-            vmed.setVisible(true);
-            dispose();
+            fecharJanela();
         }
     }// GEN-LAST:event_jBCancelarNovaCompraActionPerformed
+
+    private void fecharJanela() {
+        // EXCLUI A VENDA NO BANCO
+        Venda v = new Venda();
+        v.setNotaFiscalVenda(notaFiscalVenda);
+
+        VendaDAO dao = new VendaDAO();
+        dao.delete(v);
+        if(user != null && menu != null) {
+            JanelaVenda vmed = new JanelaVenda(user, menu);
+            vmed.setVisible(true);
+        }
+        dispose();
+    }
 
     private void jCDrogariasActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jCDrogariasActionPerformed
         // TODO add your handling code here:

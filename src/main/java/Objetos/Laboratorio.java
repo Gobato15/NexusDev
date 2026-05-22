@@ -16,6 +16,15 @@ public class Laboratorio {
     private String emailLab;
     private int numeroLab;
     private String cepLab;
+    private boolean ativo;
+
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
    
     public String toString() {
         return nomeLab;

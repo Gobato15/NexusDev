@@ -17,6 +17,15 @@ public class DrogariaObjeto {
     private String cepDrogaria;
     private String emailDrogaria;
     private String telefoneDrogaria; 
+    private boolean ativo;
+
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
 
     public String toString() {
         return nomeDrogaria;

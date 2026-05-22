@@ -17,6 +17,7 @@ public class Medicamento {
     private int quantidadeMed;
     private int codMed;
     private int codCatMed;
+    private boolean ativoMed;
 
     /**
      * @return the nomeMed
@@ -114,6 +115,14 @@ public class Medicamento {
      */
     public void setCodCatMed(int codCatMed) {
         this.codCatMed = codCatMed;
+    }
+
+    public boolean isAtivoMed() {
+        return ativoMed;
+    }
+
+    public void setAtivoMed(boolean ativoMed) {
+        this.ativoMed = ativoMed;
     }
 
 }

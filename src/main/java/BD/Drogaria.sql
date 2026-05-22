@@ -72,6 +72,7 @@ CREATE TABLE medicamento (
   Valor_Compra DECIMAL(10,2) DEFAULT 0,
   Nome_Lab VARCHAR(50),
   Cod_CatMed INT,
+  Ativo_Med TINYINT(1) NOT NULL DEFAULT 1,
   FOREIGN KEY (Cod_CatMed) REFERENCES catalogo_medicamento(Cod_CatMed)
 );
 
@@ -85,6 +86,7 @@ CREATE TABLE compra (
   CPF VARCHAR(14),
   CNPJ_Lab VARCHAR(18),
   Ativo_Compra TINYINT(1) NOT NULL DEFAULT 1,
+  Finalizada TINYINT(1) NOT NULL DEFAULT 0,
   FOREIGN KEY (CPF) REFERENCES funcionario(CPF),
   FOREIGN KEY (CNPJ_Lab) REFERENCES laboratorio(CNPJ_Lab)
 );
@@ -98,6 +100,7 @@ CREATE TABLE venda (
   Valor_Venda DECIMAL(10,2),
   CNPJ_Drog VARCHAR(18),
   CPF VARCHAR(14),
+  Finalizada TINYINT(1) NOT NULL DEFAULT 0,
   FOREIGN KEY (CNPJ_Drog) REFERENCES drogaria(CNPJ_Drog),
   FOREIGN KEY (CPF) REFERENCES funcionario(CPF)
 );
@@ -240,30 +243,73 @@ END $$
 
 DELIMITER ;
 
+-- =====================================================
+-- TRIGGER: Finalizar Venda — baixa estoque em medicamento
+-- Só executa quando venda.Finalizada muda de 0 → 1
+-- =====================================================
 DELIMITER $$
 
-DROP TRIGGER IF EXISTS trg_baixa_estoque_apos_venda $$
-CREATE TRIGGER trg_baixa_estoque_apos_venda
-AFTER INSERT ON item_venda
+DROP TRIGGER IF EXISTS trg_finalizar_venda $$
+CREATE TRIGGER trg_finalizar_venda
+AFTER UPDATE ON venda
 FOR EACH ROW
 BEGIN
-    DECLARE v_cod_med INT;
-    DECLARE v_qtd_vendida INT;
-
-    -- 1️⃣ Pega o código e quantidade vendidos diretamente do novo registro
-    SET v_cod_med = NEW.Cod_Med;
-    SET v_qtd_vendida = NEW.Qtd_ItemVenda;
-
-    -- 2️⃣ Atualiza o estoque do medicamento
-    IF v_cod_med IS NOT NULL THEN
-        UPDATE medicamento
-        SET Qtd_Med = Qtd_Med - v_qtd_vendida
-        WHERE Cod_Med = v_cod_med;
+    IF OLD.Finalizada = 0 AND NEW.Finalizada = 1 THEN
+        UPDATE medicamento m
+        JOIN item_venda iv ON m.Cod_Med = iv.Cod_Med
+        SET m.Qtd_Med = m.Qtd_Med - iv.Qtd_ItemVenda
+        WHERE iv.NotaFiscal_Saida = NEW.NotaFiscal_Saida;
     END IF;
 END $$
 
 DELIMITER ;
 
+-- =====================================================
+-- TRIGGER: Finalizar Compra — decrementa catálogo do laboratório
+-- Só executa quando compra.Finalizada muda de 0 → 1
+-- =====================================================
+DELIMITER $$
+
+DROP TRIGGER IF EXISTS trg_finalizar_compra $$
+CREATE TRIGGER trg_finalizar_compra
+AFTER UPDATE ON compra
+FOR EACH ROW
+BEGIN
+    IF OLD.Finalizada = 0 AND NEW.Finalizada = 1 THEN
+        UPDATE catalogo_medicamento cm
+        JOIN item i ON cm.Cod_CatMed = i.Cod_CatMed
+        SET cm.quantidade = cm.quantidade - i.Qtd_Item
+        WHERE i.NotaFiscal_Entrada = NEW.NotaFiscal_Entrada;
+    END IF;
+END $$
+
+DELIMITER ;
+
+-- =====================================================
+-- TRIGGER: Cancelar Venda Finalizada — reverte estoque
+-- BEFORE DELETE para poder ler os itens antes da exclusão
+-- =====================================================
+DELIMITER $$
+
+DROP TRIGGER IF EXISTS trg_cancelar_venda_finalizada $$
+CREATE TRIGGER trg_cancelar_venda_finalizada
+BEFORE DELETE ON venda
+FOR EACH ROW
+BEGIN
+    IF OLD.Finalizada = 1 THEN
+        UPDATE medicamento m
+        JOIN item_venda iv ON m.Cod_Med = iv.Cod_Med
+        SET m.Qtd_Med = m.Qtd_Med + iv.Qtd_ItemVenda
+        WHERE iv.NotaFiscal_Saida = OLD.NotaFiscal_Saida;
+    END IF;
+    DELETE FROM item_venda WHERE NotaFiscal_Saida = OLD.NotaFiscal_Saida;
+END $$
+
+DELIMITER ;
+
+-- =====================================================
+-- TRIGGER: Cancelar Compra — reverte estoque (CORRIGIDO: soma de volta)
+-- =====================================================
 DELIMITER $$
 
 DROP TRIGGER IF EXISTS trg_cancela_compra_reverte_estoque $$
@@ -271,15 +317,24 @@ CREATE TRIGGER trg_cancela_compra_reverte_estoque
 AFTER UPDATE ON compra
 FOR EACH ROW
 BEGIN
-    IF OLD.Ativo_Compra = 1 AND NEW.Ativo_Compra = 0 THEN
+    IF OLD.Ativo_Compra = 1 AND NEW.Ativo_Compra = 0 AND OLD.Finalizada = 1 THEN
         UPDATE medicamento m
         JOIN item i ON m.Cod_Med = i.Cod_Med
-        SET m.Qtd_Med = m.Qtd_Med - i.Qtd_Item
+        SET m.Qtd_Med = m.Qtd_Med + i.Qtd_Item
+        WHERE i.NotaFiscal_Entrada = NEW.NotaFiscal_Entrada;
+
+        UPDATE catalogo_medicamento cm
+        JOIN item i ON cm.Cod_CatMed = i.Cod_CatMed
+        SET cm.quantidade = cm.quantidade + i.Qtd_Item
         WHERE i.NotaFiscal_Entrada = NEW.NotaFiscal_Entrada;
     END IF;
 END $$
 
 DELIMITER ;
+
+-- =====================================================
+-- INSERTS: Funcionários padrão
+-- =====================================================
 INSERT INTO funcionario (CPF, Nome_Fun, Telefone_Fun, Cep_Fun, Num_Fun, Email_Fun, Senha_Fun, Funcao, Ativo_Fun) VALUES
 ('123456789-10','Nexus ADM','19998796179','13502-030',284,'nexusadm@gmail.com','$2y$10$f9tyQJC2VhXl0GQswvKS6.wweN6W3qlNHZXoF9jpo4iCmyTt4PuAi','Administrador',1),
 ('98765432109','Nexus Usario','19998796179','13502-030',284,'nexususuario@gmail.com','$2y$10$Ww64qXEO1CqynfymGx2HYu.M5ZPeoB5VmizcYBJ0azOjoD4RNRXGK','Usuario',1);

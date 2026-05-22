@@ -44,34 +44,17 @@ public class JanelaCompra extends javax.swing.JFrame {
         initComponents();
         this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         this.setLocationRelativeTo(null);
-        getContentPane().setBackground(Color.GRAY);
         this.user = user;
         this.menu = menu;
 
         this.cpf = user.getCpf();
-        carregarLaboratorios();
-        filtroLaboratorios();
-        jBCadastrarCompra.setEnabled(false);
+        jBCadastrarCompra.setEnabled(true);
         jTTabelaMed.setModel(modelo);
         modelo.recarregaTabela();
-
-        jCItemNovaCompra.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int index = jCItemNovaCompra.getSelectedIndex();
-
-                if (index == 0) {
-                    cnpj = null;
-                    jBCadastrarCompra.setEnabled(false);
-                    return;
-                }
-
-                // Código que executa quando selecionar algo
-                cnpj = laboratorios.get(jCItemNovaCompra.getSelectedIndex()).getCnpjLab();
-                System.out.println(laboratorios.get(jCItemNovaCompra.getSelectedIndex()).getCnpjLab());
-                jBCadastrarCompra.setEnabled(true);
-            }
-        });
+        styleComponents();
+        
+        carregarLaboratorios();
+        filtroLaboratorios();
     }
 
     private void filtroLaboratorios() {
@@ -263,7 +246,8 @@ public class JanelaCompra extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jBCadastrarCompra)
-                    .addComponent(jBVoltarCompra)))
+                    .addComponent(jBVoltarCompra))
+                .addContainerGap(50, Short.MAX_VALUE))
         );
 
         pack();
@@ -321,16 +305,21 @@ public class JanelaCompra extends javax.swing.JFrame {
         }
     }// GEN-LAST:event_jTTabelaMedMouseClicked
 
-    private void jCItemNovaCompraActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jCItemNovaCompraActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jCItemNovaCompraActionPerformed
+    private void jCItemNovaCompraActionPerformed(java.awt.event.ActionEvent evt) {
+        int index = jCItemNovaCompra.getSelectedIndex();
+        if (index <= 0) {
+            cnpj = null;
+            return;
+        }
+
+        // -1 pois o primeiro item é o "-- Selecione --"
+        cnpj = laboratorios.get(index - 1).getCnpjLab();
+        jBCadastrarCompra.setEnabled(true);
+    }
 
     private void jCFiltroLaboratórioActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jCFiltroLaboratórioActionPerformed
         int index = jCFiltroLaboratório.getSelectedIndex();
-
         CompraDAO dao = new CompraDAO();
-
-        // Item "Todos"
         if (index <= 0) {
             modelo.setCompras(dao.read());
             return;
@@ -401,6 +390,52 @@ public class JanelaCompra extends javax.swing.JFrame {
                     JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
+    }
+
+    private void styleComponents() {
+        getContentPane().setBackground(new Color(30, 30, 30));
+        
+        // Labels
+        jLabel1.setForeground(Color.WHITE);
+        jLabel1.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 24));
+        jLabel2.setForeground(Color.WHITE);
+        jLabel3.setForeground(Color.WHITE);
+
+        // Buttons
+        javax.swing.JButton[] botoes = {jBCadastrarCompra, jBVoltarCompra};
+                for (javax.swing.JButton btn : botoes) {
+            btn.setBackground(new java.awt.Color(45, 45, 45));
+            btn.setForeground(java.awt.Color.WHITE);
+            btn.setFocusPainted(false);
+            btn.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
+            btn.setPreferredSize(new java.awt.Dimension(160, 40));
+            btn.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(70, 70, 70)));
+            btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        }
+        jBCadastrarCompra.setBackground(new Color(0, 100, 0));
+
+        // Combo Boxes
+        jCItemNovaCompra.setBackground(new Color(60, 60, 60));
+        jCItemNovaCompra.setForeground(Color.WHITE);
+        jCItemNovaCompra.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(80, 80, 80)));
+        jCFiltroLaboratório.setBackground(new Color(60, 60, 60));
+        jCFiltroLaboratório.setForeground(Color.WHITE);
+        jCFiltroLaboratório.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(80, 80, 80)));
+
+        // Table
+        jTTabelaMed.setBackground(new Color(60, 60, 60));
+        jTTabelaMed.setForeground(Color.WHITE);
+        jTTabelaMed.setGridColor(new Color(80, 80, 80));
+        jTTabelaMed.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
+        jTTabelaMed.setRowHeight(25);
+        jTTabelaMed.setSelectionBackground(new Color(0, 100, 0, 80));
+        jTTabelaMed.setSelectionForeground(Color.WHITE);
+        jTTabelaMed.getTableHeader().setBackground(new Color(30, 30, 30));
+        jTTabelaMed.getTableHeader().setForeground(Color.WHITE);
+        jTTabelaMed.getTableHeader().setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
+        jTTabelaMed.setFillsViewportHeight(true);
+        jScrollPane2.getViewport().setBackground(new Color(45, 45, 45));
+        jScrollPane2.setBorder(javax.swing.BorderFactory.createEmptyBorder());
     }
 
     /**

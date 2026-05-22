@@ -15,9 +15,9 @@ import javax.swing.table.AbstractTableModel;
  * @author andrey.munhoz
  */
 public class CatalogoTableModel extends AbstractTableModel {
-    
+
     private List<CatalogoMedicamento> dados = new ArrayList<>();
-    private String[] colunas = {"Nome", "Código", "Descrição", "Valor", "CNPJ Lab", "Data Validade", "Quantidade"};
+    private String[] colunas = { "Nome", "Código", "Descrição", "Valor", "CNPJ Lab", "Data Validade", "Quantidade" };
 
     @Override
     public String getColumnName(int column) {
