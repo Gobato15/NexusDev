@@ -144,9 +144,18 @@ public class Menu extends javax.swing.JFrame {
     }
 
     private void jBCadastrarFunActionPerformed(java.awt.event.ActionEvent evt) {
-        TelaCadastroFun cadfun = new TelaCadastroFun(this);
-        cadfun.setVisible(true);
-        this.setVisible(false);
+        if (user != null && "Administrador".equalsIgnoreCase(user.getFuncao())) {
+            TelaCadastroFun cadfun = new TelaCadastroFun(this);
+            cadfun.setVisible(true);
+            this.setVisible(false);
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(
+                this,
+                "Acesso negado!\nApenas administradores podem gerenciar funcionários.",
+                "Permissão Insuficiente",
+                javax.swing.JOptionPane.ERROR_MESSAGE
+            );
+        }
     }
 
     public static void main(String args[]) {
