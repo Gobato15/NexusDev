@@ -6,10 +6,12 @@ package DAO;
 
 import BD.Conexao;
 import Objetos.CatalogoMedicamento;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -31,8 +33,9 @@ public class CatalogoDAO {
 
             while (rs.next()) {
                 CatalogoMedicamento cm = new CatalogoMedicamento();
-                cm.setNomeCatalogo(rs.getString("Nome_CatMed"));
                 cm.setCodCatMed(rs.getInt("Cod_CatMed"));
+                cm.setEanMed(rs.getString("EAN_Med"));
+                cm.setNomeCatalogo(rs.getString("Nome_CatMed"));
                 cm.setDescCatalogo(rs.getString("Desc_CatMed"));
                 cm.setValorCatalogo(rs.getDouble("Valor_CatMed"));
                 cm.setCnpjLabCat(rs.getString("CNPJ_Lab"));
@@ -61,8 +64,9 @@ public class CatalogoDAO {
 
             while (rs.next()) {
                 CatalogoMedicamento cm = new CatalogoMedicamento();
-                cm.setNomeCatalogo(rs.getString("Nome_CatMed"));
                 cm.setCodCatMed(rs.getInt("Cod_CatMed"));
+                cm.setEanMed(rs.getString("EAN_Med"));
+                cm.setNomeCatalogo(rs.getString("Nome_CatMed"));
                 cm.setDescCatalogo(rs.getString("Desc_CatMed"));
                 cm.setValorCatalogo(rs.getDouble("Valor_CatMed"));
                 cm.setCnpjLabCat(rs.getString("CNPJ_Lab"));
@@ -84,14 +88,15 @@ public class CatalogoDAO {
         PreparedStatement stmt = null;
 
         try {
-            stmt = con.prepareStatement("INSERT INTO catalogo_medicamento (Nome_CatMed, Desc_CatMed, Valor_CatMed, CNPJ_Lab, datacompraItemCat, dataValItemCat, quantidade) VALUES (?,?,?,?,?,?,?)");
-            stmt.setString(1, cm.getNomeCatalogo());
-            stmt.setString(2, cm.getDescCatalogo());
-            stmt.setDouble(3, cm.getValorCatalogo());
-            stmt.setString(4, cm.getCnpjLabCat());
-            stmt.setString(5, cm.getDatacompraItemCat());
-            stmt.setString(6, cm.getDataValItemCat());
-            stmt.setInt(7, cm.getQuantidade());
+            stmt = con.prepareStatement("INSERT INTO catalogo_medicamento (EAN_Med, Nome_CatMed, Desc_CatMed, Valor_CatMed, CNPJ_Lab, datacompraItemCat, dataValItemCat, quantidade) VALUES (?,?,?,?,?,?,?,?)");
+            stmt.setString(1, cm.getEanMed());
+            stmt.setString(2, cm.getNomeCatalogo());
+            stmt.setString(3, cm.getDescCatalogo());
+            stmt.setDouble(4, cm.getValorCatalogo());
+            stmt.setString(5, cm.getCnpjLabCat());
+            stmt.setString(6, cm.getDatacompraItemCat());
+            stmt.setString(7, cm.getDataValItemCat());
+            stmt.setInt(8, cm.getQuantidade());
 
             stmt.execute();
             JOptionPane.showMessageDialog(null, "Catálogo cadastrado com sucesso!");
@@ -103,38 +108,27 @@ public class CatalogoDAO {
         }
     }
 
-    public void atualizarQuantidade(int codCatMed, int quantidadeComprada) {
-        Connection con = Conexao.getConnection();
-        PreparedStatement stmt = null;
+    // REMOVIDO: atualizarQuantidade(int codCatMed, int quantidadeComprada)
+    // Motivo: A trigger trg_finalizar_compra no banco nexusdev já decrementa
+    // catalogo_medicamento.quantidade automaticamente ao finalizar uma compra.
+    // Manter este método causaria duplicação de lógica de estoque.
 
-        try {
-            stmt = con.prepareStatement("UPDATE catalogo_medicamento SET quantidade = quantidade - ? WHERE Cod_CatMed = ?");
-            stmt.setInt(1, quantidadeComprada);
-            stmt.setInt(2, codCatMed);
-
-            stmt.execute();
-
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Falha ao atualizar quantidade do catálogo: " + e);
-        } finally {
-            Conexao.closeConnection(con, stmt);
-        }
-    }
 
     public void update(CatalogoMedicamento cm) {
         Connection con = Conexao.getConnection();
         PreparedStatement stmt = null;
 
         try {
-            stmt = con.prepareStatement("UPDATE catalogo_medicamento SET Nome_CatMed = ?, Desc_CatMed = ?, Valor_CatMed = ?, CNPJ_Lab = ?, datacompraItemCat = ?, dataValItemCat = ?, quantidade = ? WHERE Cod_CatMed = ?");
-            stmt.setString(1, cm.getNomeCatalogo());
-            stmt.setString(2, cm.getDescCatalogo());
-            stmt.setDouble(3, cm.getValorCatalogo());
-            stmt.setString(4, cm.getCnpjLabCat());
-            stmt.setString(5, cm.getDatacompraItemCat());
-            stmt.setString(6, cm.getDataValItemCat());
-            stmt.setInt(7, cm.getQuantidade());
-            stmt.setInt(8, cm.getCodCatMed());
+            stmt = con.prepareStatement("UPDATE catalogo_medicamento SET EAN_Med = ?, Nome_CatMed = ?, Desc_CatMed = ?, Valor_CatMed = ?, CNPJ_Lab = ?, datacompraItemCat = ?, dataValItemCat = ?, quantidade = ? WHERE Cod_CatMed = ?");
+            stmt.setString(1, cm.getEanMed());
+            stmt.setString(2, cm.getNomeCatalogo());
+            stmt.setString(3, cm.getDescCatalogo());
+            stmt.setDouble(4, cm.getValorCatalogo());
+            stmt.setString(5, cm.getCnpjLabCat());
+            stmt.setString(6, cm.getDatacompraItemCat());
+            stmt.setString(7, cm.getDataValItemCat());
+            stmt.setInt(8, cm.getQuantidade());
+            stmt.setInt(9, cm.getCodCatMed());
 
             stmt.execute();
             JOptionPane.showMessageDialog(null, "Catálogo atualizado com sucesso!");
@@ -161,6 +155,35 @@ public class CatalogoDAO {
             JOptionPane.showMessageDialog(null, "Falha ao remover: " + e);
         } finally {
             Conexao.closeConnection(con, stmt);
+        }
+    }
+
+    /**
+     * Verifica se um EAN já existe na tabela catalogo_medicamento usando a stored procedure.
+     * @param ean O código EAN a verificar (13 dígitos)
+     * @return true se o EAN já existe, false se está livre
+     */
+    public boolean verificarEanDuplicado(String ean) {
+        Connection con = Conexao.getConnection();
+        CallableStatement cstmt = null;
+
+        try {
+            cstmt = con.prepareCall("{CALL sp_verifica_ean_catalogo(?, ?)}");
+            cstmt.setString(1, ean);
+            cstmt.registerOutParameter(2, Types.TINYINT);
+            cstmt.execute();
+
+            int resultado = cstmt.getInt(2);
+            return resultado == 1;
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao verificar EAN: " + e.getMessage());
+            return false;
+        } finally {
+            try {
+                if (cstmt != null) cstmt.close();
+            } catch (SQLException e) { /* ignore */ }
+            Conexao.closeConnection(con);
         }
     }
 }

@@ -30,7 +30,7 @@ public class Menu extends javax.swing.JFrame {
         getContentPane().setBackground(new Color(30, 30, 30));
         
         // Estilização dos botões
-        JButton[] botoes = {jBCadastrarMed, jBCadastrarFun, jBVenda, jBCompra, jBDrogaria, jBLaboratorio};
+        JButton[] botoes = {jBCatalogo, jBEstoqueMed, jBCadastrarFun, jBVenda, jBCompra, jBDrogaria, jBLaboratorio};
                 for (javax.swing.JButton btn : botoes) {
             btn.setBackground(new java.awt.Color(45, 45, 45));
             btn.setForeground(java.awt.Color.WHITE);
@@ -50,7 +50,8 @@ public class Menu extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jPanelButtons = new javax.swing.JPanel();
-        jBCadastrarMed = new javax.swing.JButton();
+        jBCatalogo = new javax.swing.JButton();
+        jBEstoqueMed = new javax.swing.JButton();
         jBCadastrarFun = new javax.swing.JButton();
         jBVenda = new javax.swing.JButton();
         jBCompra = new javax.swing.JButton();
@@ -64,11 +65,15 @@ public class Menu extends javax.swing.JFrame {
         jLabel1.setText("NEXUS DEV - SISTEMA FARMACÊUTICO");
 
         jPanelButtons.setOpaque(false);
-        jPanelButtons.setLayout(new java.awt.GridLayout(2, 3, 30, 30));
+        jPanelButtons.setLayout(new java.awt.GridLayout(3, 3, 30, 30));
 
-        jBCadastrarMed.setText("MEDICAMENTOS");
-        jBCadastrarMed.addActionListener(evt -> jBCadastrarMedActionPerformed(evt));
-        jPanelButtons.add(jBCadastrarMed);
+        jBCatalogo.setText("CATÁLOGO MEDICAMENTO");
+        jBCatalogo.addActionListener(evt -> jBCatalogoActionPerformed(evt));
+        jPanelButtons.add(jBCatalogo);
+
+        jBEstoqueMed.setText("ESTOQUE FÍSICO");
+        jBEstoqueMed.addActionListener(evt -> jBEstoqueMedActionPerformed(evt));
+        jPanelButtons.add(jBEstoqueMed);
 
         jBCadastrarFun.setText("FUNCIONÁRIOS");
         jBCadastrarFun.addActionListener(evt -> jBCadastrarFunActionPerformed(evt));
@@ -113,9 +118,15 @@ public class Menu extends javax.swing.JFrame {
         pack();
     }
 
-    private void jBCadastrarMedActionPerformed(java.awt.event.ActionEvent evt) {
-        CadastroMedicamento cadmed = new CadastroMedicamento(user, this);
-        cadmed.setVisible(true);
+    private void jBCatalogoActionPerformed(java.awt.event.ActionEvent evt) {
+        JanelaCatalogo cat = new JanelaCatalogo(user, this);
+        cat.setVisible(true);
+        this.setVisible(false);
+    }
+
+    private void jBEstoqueMedActionPerformed(java.awt.event.ActionEvent evt) {
+        MedicamentoInterno est = new MedicamentoInterno(user, this);
+        est.setVisible(true);
         this.setVisible(false);
     }
 
@@ -163,7 +174,8 @@ public class Menu extends javax.swing.JFrame {
     }
 
     private javax.swing.JButton jBCadastrarFun;
-    private javax.swing.JButton jBCadastrarMed;
+    private javax.swing.JButton jBCatalogo;
+    private javax.swing.JButton jBEstoqueMed;
     private javax.swing.JButton jBCompra;
     private javax.swing.JButton jBDrogaria;
     private javax.swing.JButton jBLaboratorio;

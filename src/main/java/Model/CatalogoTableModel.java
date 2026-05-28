@@ -17,7 +17,7 @@ import javax.swing.table.AbstractTableModel;
 public class CatalogoTableModel extends AbstractTableModel {
 
     private List<CatalogoMedicamento> dados = new ArrayList<>();
-    private String[] colunas = { "Nome", "Código", "Descrição", "Valor", "CNPJ Lab", "Data Validade", "Quantidade" };
+    private String[] colunas = { "EAN", "Nome", "Código", "Descrição", "Valor", "CNPJ Lab", "Data Validade", "Quantidade" };
 
     @Override
     public String getColumnName(int column) {
@@ -38,18 +38,20 @@ public class CatalogoTableModel extends AbstractTableModel {
     public Object getValueAt(int linha, int coluna) {
         switch (coluna) {
             case 0:
-                return dados.get(linha).getNomeCatalogo();
+                return dados.get(linha).getEanMed();
             case 1:
-                return dados.get(linha).getCodCatMed();
+                return dados.get(linha).getNomeCatalogo();
             case 2:
-                return dados.get(linha).getDescCatalogo();
+                return dados.get(linha).getCodCatMed();
             case 3:
-                return dados.get(linha).getValorCatalogo();
+                return dados.get(linha).getDescCatalogo();
             case 4:
-                return dados.get(linha).getCnpjLabCat();
+                return dados.get(linha).getValorCatalogo();
             case 5:
-                return dados.get(linha).getDataValItemCat();
+                return dados.get(linha).getCnpjLabCat();
             case 6:
+                return dados.get(linha).getDataValItemCat();
+            case 7:
                 return dados.get(linha).getQuantidade();
         }
         return null;
@@ -59,24 +61,27 @@ public class CatalogoTableModel extends AbstractTableModel {
     public void setValueAt(Object valor, int linha, int coluna) {
         switch (coluna) {
             case 0:
-                dados.get(linha).setNomeCatalogo((String) valor);
+                dados.get(linha).setEanMed((String) valor);
                 break;
             case 1:
-                dados.get(linha).setCodCatMed(Integer.parseInt((String) valor));
+                dados.get(linha).setNomeCatalogo((String) valor);
                 break;
             case 2:
-                dados.get(linha).setDescCatalogo((String) valor);
+                dados.get(linha).setCodCatMed(Integer.parseInt((String) valor));
                 break;
             case 3:
-                dados.get(linha).setValorCatalogo(Double.valueOf((String) valor));
+                dados.get(linha).setDescCatalogo((String) valor);
                 break;
             case 4:
-                dados.get(linha).setCnpjLabCat((String) valor);
+                dados.get(linha).setValorCatalogo(Double.valueOf((String) valor));
                 break;
             case 5:
-                dados.get(linha).setDataValItemCat((String) valor);
+                dados.get(linha).setCnpjLabCat((String) valor);
                 break;
             case 6:
+                dados.get(linha).setDataValItemCat((String) valor);
+                break;
+            case 7:
                 dados.get(linha).setQuantidade(Integer.parseInt((String) valor));
                 break;
         }

@@ -12,6 +12,7 @@ public class CatalogoMedicamento {
 
     
     private int codCatMed;
+    private String eanMed;
     private String nomeCatalogo;
     private String descCatalogo;
     private Double valorCatalogo;
@@ -132,6 +133,20 @@ public class CatalogoMedicamento {
      */
     public void setDatacompraItemCat(String datacompraItemCat) {
         this.datacompraItemCat = datacompraItemCat;
+    }
+
+    /**
+     * @return the eanMed
+     */
+    public String getEanMed() {
+        return eanMed;
+    }
+
+    /**
+     * @param eanMed the eanMed to set
+     */
+    public void setEanMed(String eanMed) {
+        this.eanMed = eanMed;
     }
 
 }

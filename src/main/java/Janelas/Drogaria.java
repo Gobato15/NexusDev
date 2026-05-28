@@ -65,6 +65,7 @@ public class Drogaria extends javax.swing.JFrame {
         jTCEPDrogaria = new javax.swing.JFormattedTextField();
         jTTelDrogaria = new javax.swing.JFormattedTextField();
         jBDesativados = new javax.swing.JButton();
+        jBLimparCampos = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1920, 1080));
@@ -168,6 +169,13 @@ public class Drogaria extends javax.swing.JFrame {
             }
         });
 
+        jBLimparCampos.setText("Limpar Campos");
+        jBLimparCampos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LimpaCampos();
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -178,6 +186,8 @@ public class Drogaria extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jBLimparCampos)
+                        .addGap(18, 18, 18)
                         .addComponent(jBDesativados)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jBAlterarDrogaria)
@@ -249,7 +259,8 @@ public class Drogaria extends javax.swing.JFrame {
                     .addComponent(jBVoltarDrogaria)
                     .addComponent(jBExcluirDrogaria)
                     .addComponent(jBAlterarDrogaria)
-                    .addComponent(jBDesativados))
+                    .addComponent(jBDesativados)
+                    .addComponent(jBLimparCampos))
                 .addGap(14, 14, 14))
         );
 
@@ -257,6 +268,35 @@ public class Drogaria extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBCadastrarDrogariaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBCadastrarDrogariaActionPerformed
+        // Validação de campos obrigatórios
+        if (jTNomeDrogaria.getText().trim().isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Erro: O campo Nome é obrigatório.", "Erro de Validação", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        // Validação de CNPJ (formato XX.XXX.XXX/XXXX-XX)
+        String cnpj = jTCNPJDrograria.getText().trim();
+        if (!cnpj.matches("\\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2}")) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Erro: CNPJ inválido. Preencha no formato XX.XXX.XXX/XXXX-XX.", "Erro de Validação", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        // Validação de Email
+        String email = jTEmailDrogaria.getText().trim();
+        if (!email.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Erro: E-mail inválido.", "Erro de Validação", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        // Validação de Número > 0
+        try {
+            int numero = Integer.parseInt(jTNumeroDrogaria.getText().trim());
+            if (numero <= 0) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Erro: O campo Número deve ser maior que zero.", "Erro de Validação", javax.swing.JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } catch (NumberFormatException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Erro: O campo Número deve conter apenas números.", "Erro de Validação", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         DrogariaObjeto d = new DrogariaObjeto();
         DrogariaDAO dao = new DrogariaDAO();
         
@@ -265,7 +305,7 @@ public class Drogaria extends javax.swing.JFrame {
         d.setCepDrogaria(jTCEPDrogaria.getText());
         d.setEmailDrogaria(jTEmailDrogaria.getText());
         d.setTelefoneDrogaria(jTTelDrogaria.getText());
-        d.setNumeroDrogaria(Integer.parseInt(jTNumeroDrogaria.getText()));
+        d.setNumeroDrogaria(Integer.parseInt(jTNumeroDrogaria.getText().trim()));
         
         dao.create(d);
         modelo.recarregaTabela();
@@ -349,7 +389,7 @@ public class Drogaria extends javax.swing.JFrame {
         }
 
         // Buttons
-        javax.swing.JButton[] botoes = {jBCadastrarDrogaria, jBAlterarDrogaria, jBExcluirDrogaria, jBDesativados, jBVoltarDrogaria};
+        javax.swing.JButton[] botoes = {jBCadastrarDrogaria, jBAlterarDrogaria, jBExcluirDrogaria, jBDesativados, jBVoltarDrogaria, jBLimparCampos};
                 for (javax.swing.JButton btn : botoes) {
             btn.setBackground(new java.awt.Color(45, 45, 45));
             btn.setForeground(java.awt.Color.WHITE);
@@ -430,6 +470,7 @@ public class Drogaria extends javax.swing.JFrame {
     private javax.swing.JButton jBCadastrarDrogaria;
     private javax.swing.JButton jBDesativados;
     private javax.swing.JButton jBExcluirDrogaria;
+    private javax.swing.JButton jBLimparCampos;
     private javax.swing.JButton jBVoltarDrogaria;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

@@ -10,13 +10,16 @@ package Objetos;
  */
 public class Medicamento {
 
+    private String eanMed;
     private String nomeMed;
     private String descricaoMed;
     private String dataValidadeMed;
     private Double valorMed;
+    private Double valorCompra;
     private int quantidadeMed;
     private int codMed;
     private int codCatMed;
+    private String nomeLab;
     private boolean ativoMed;
 
     /**
@@ -123,6 +126,48 @@ public class Medicamento {
 
     public void setAtivoMed(boolean ativoMed) {
         this.ativoMed = ativoMed;
+    }
+
+    /**
+     * @return the eanMed
+     */
+    public String getEanMed() {
+        return eanMed;
+    }
+
+    /**
+     * @param eanMed the eanMed to set
+     */
+    public void setEanMed(String eanMed) {
+        this.eanMed = eanMed;
+    }
+
+    /**
+     * @return the valorCompra
+     */
+    public Double getValorCompra() {
+        return valorCompra;
+    }
+
+    /**
+     * @param valorCompra the valorCompra to set
+     */
+    public void setValorCompra(Double valorCompra) {
+        this.valorCompra = valorCompra;
+    }
+
+    /**
+     * @return the nomeLab
+     */
+    public String getNomeLab() {
+        return nomeLab;
+    }
+
+    /**
+     * @param nomeLab the nomeLab to set
+     */
+    public void setNomeLab(String nomeLab) {
+        this.nomeLab = nomeLab;
     }
 
 }
